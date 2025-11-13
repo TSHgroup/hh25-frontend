@@ -16,7 +16,7 @@ const PublicNavbar: React.FC = () => {
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/>
                                 </svg>
                             </div>
-                            <span className="text-xl font-bold text-gray-900">TSH Hackheros2025</span>
+                            <span className="text-xl font-bold text-gray-900">OdpalGadke</span>
                         </Link>
                     </div>
 
@@ -25,7 +25,7 @@ const PublicNavbar: React.FC = () => {
                             Features
                         </Link>
                         <Link to="/#about" className="text-base font-medium text-gray-700 hover:text-blue-600 transition">
-                            About
+                            How it works
                         </Link>
                         <Link to="/#pricing" className="text-base font-medium text-gray-700 hover:text-blue-600 transition">
                             FAQ
@@ -67,7 +67,7 @@ const PublicNavbar: React.FC = () => {
                                     Features
                                 </Link>
                                 <Link to="#about" className="px-4 py-2 text-base font-medium text-gray-700 rounded-md hover:bg-gray-50 transition">
-                                    About
+                                    How it works
                                 </Link>
                                 <Link to="#pricing" className="px-4 py-2 text-base font-medium text-gray-700 rounded-md hover:bg-gray-50 transition">
                                     FAQ
