@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Link } from "react-router";
 
-const Navbar: React.FC = () => {
+const PublicNavbar: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
-        <header className="sticky top-0 z-50 w-full bg-white shadow-sm border-b border-gray-200">
+        <header className="sticky top-0 z-50 w-full bg-gray-50 shadow-sm border-b border-gray-200">
             <div className="px-9">
                 <div className="grid grid-cols-2 md:grid-cols-3 items-center h-20 gap-4">
                     
@@ -21,15 +21,15 @@ const Navbar: React.FC = () => {
                     </div>
 
                     <nav className="hidden md:flex items-center justify-center gap-8 pl-4 pr-4">
-                        <a href="#features" className="text-base font-medium text-gray-700 hover:text-blue-600 transition">
+                        <Link to="/#features" className="text-base font-medium text-gray-700 hover:text-blue-600 transition">
                             Features
-                        </a>
-                        <a href="#about" className="text-base font-medium text-gray-700 hover:text-blue-600 transition">
+                        </Link>
+                        <Link to="/#about" className="text-base font-medium text-gray-700 hover:text-blue-600 transition">
                             About
-                        </a>
-                        <a href="#pricing" className="text-base font-medium text-gray-700 hover:text-blue-600 transition">
+                        </Link>
+                        <Link to="/#pricing" className="text-base font-medium text-gray-700 hover:text-blue-600 transition">
                             FAQ
-                        </a>
+                        </Link>
                     </nav>
 
                     <div className="flex items-center justify-end pl-4 pr-4">
@@ -63,15 +63,15 @@ const Navbar: React.FC = () => {
                     <div className="md:hidden border-t border-gray-200 bg-white">
                         <div className="px-4 py-4 space-y-4">
                             <nav className="flex flex-col space-y-2">
-                                <a href="#features" className="px-4 py-2 text-base font-medium text-gray-700 rounded-md hover:bg-gray-50 transition">
+                                <Link to="#features" className="px-4 py-2 text-base font-medium text-gray-700 rounded-md hover:bg-gray-50 transition">
                                     Features
-                                </a>
-                                <a href="#about" className="px-4 py-2 text-base font-medium text-gray-700 rounded-md hover:bg-gray-50 transition">
+                                </Link>
+                                <Link to="#about" className="px-4 py-2 text-base font-medium text-gray-700 rounded-md hover:bg-gray-50 transition">
                                     About
-                                </a>
-                                <a href="#pricing" className="px-4 py-2 text-base font-medium text-gray-700 rounded-md hover:bg-gray-50 transition">
+                                </Link>
+                                <Link to="#pricing" className="px-4 py-2 text-base font-medium text-gray-700 rounded-md hover:bg-gray-50 transition">
                                     FAQ
-                                </a>
+                                </Link>
                             </nav>
                             <div className="pt-4 border-t border-gray-200 space-y-3">
                                 <Link to="/login">
@@ -93,4 +93,4 @@ const Navbar: React.FC = () => {
     );
 };
 
-export default Navbar;
+export default PublicNavbar;
