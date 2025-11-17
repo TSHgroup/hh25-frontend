@@ -27,8 +27,8 @@ const PublicNavbar: React.FC = () => {
                         <Link to="/#about" className="text-base font-medium text-gray-700 hover:text-blue-600 transition">
                             How it works
                         </Link>
-                        <Link to="/#pricing" className="text-base font-medium text-gray-700 hover:text-blue-600 transition">
-                            FAQ
+                        <Link to="/#detailed-info" className="text-base font-medium text-gray-700 hover:text-blue-600 transition">
+                            More Info
                         </Link>
                     </nav>
 
@@ -70,7 +70,7 @@ const PublicNavbar: React.FC = () => {
                                     How it works
                                 </Link>
                                 <Link to="#pricing" className="px-4 py-2 text-base font-medium text-gray-700 rounded-md hover:bg-gray-50 transition">
-                                    FAQ
+                                    More Info
                                 </Link>
                             </nav>
                             <div className="pt-4 border-t border-gray-200 space-y-3">
