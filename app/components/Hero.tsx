@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 
 const Hero: React.FC = () => {
     return(
-        <section className="relative overflow-hidden bg-gradient-to-br from-blue-50 via-white to-blue-50 pt-32 pb-40">
+        <section className="relative overflow-hidden bg-linear-to-br from-blue-50 via-white to-blue-50 pt-32 pb-40">
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
                 <div className="absolute top-20 left-10 w-72 h-72 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob"></div>
                 <div className="absolute top-40 right-10 w-72 h-72 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob animation-delay-2000"></div>
@@ -21,7 +21,7 @@ const Hero: React.FC = () => {
                         </div>
 
                         <h1 className="text-5xl lg:text-6xl xl:text-7xl font-bold text-gray-900 leading-tight">
-                            Odpal<span className="text-blue-600 inline-block hover:scale-105 transition-transform duration-300">Gadkę</span> i mów z pewnością siebie
+                            Odpal<span className="text-blue-600 inline-block hover:scale-105 transition-transform duration-300">Gadke</span> i mów z pewnością siebie
                         </h1>
 
                         <p className="text-xl lg:text-2xl text-gray-600 leading-relaxed">
@@ -33,7 +33,7 @@ const Hero: React.FC = () => {
                                 to="/signup" 
                                 className="group px-8 py-4 bg-blue-600 text-white text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 text-center relative overflow-hidden">
                                 <span className="relative z-10">Zacznij Trening</span>
-                                <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                <div className="absolute inset-0 bg-linear-to-r from-blue-600 to-blue-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                             </Link>
                             <a 
                                 href="#features" 
@@ -44,7 +44,7 @@ const Hero: React.FC = () => {
                     </div>
 
                     <div className="relative animate-fade-in-up animation-delay-200">
-                        <div className="relative bg-gradient-to-br from-blue-100 to-blue-50 rounded-3xl p-8 shadow-2xl transform hover:scale-105 transition-transform duration-500">
+                        <div className="relative bg-linear-to-br from-blue-100 to-blue-50 rounded-3xl p-8 shadow-2xl transform hover:scale-105 transition-transform duration-500">
                             <div className="bg-white rounded-2xl p-6 shadow-lg backdrop-blur-sm">
                                 <div className="flex items-center gap-3 mb-6">
                                     <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center animate-pulse-slow">
@@ -65,7 +65,7 @@ const Hero: React.FC = () => {
                                             <span className="font-bold text-green-600">87%</span>
                                         </div>
                                         <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-                                            <div className="h-full bg-gradient-to-r from-green-400 to-green-600 rounded-full animate-progress-bar" style={{ width: '87%' }}></div>
+                                            <div className="h-full bg-linear-to-r from-green-400 to-green-600 rounded-full animate-progress-bar" style={{ width: '87%' }}></div>
                                         </div>
                                     </div>
 
@@ -75,7 +75,7 @@ const Hero: React.FC = () => {
                                             <span className="font-bold text-blue-600">92%</span>
                                         </div>
                                         <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-                                            <div className="h-full bg-gradient-to-r from-blue-400 to-blue-600 rounded-full animate-progress-bar animation-delay-200" style={{ width: '92%' }}></div>
+                                            <div className="h-full bg-linear-to-r from-blue-400 to-blue-600 rounded-full animate-progress-bar animation-delay-200" style={{ width: '92%' }}></div>
                                         </div>
                                     </div>
 
@@ -85,14 +85,14 @@ const Hero: React.FC = () => {
                                             <span className="font-bold text-purple-600">78%</span>
                                         </div>
                                         <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
-                                            <div className="h-full bg-gradient-to-r from-purple-400 to-purple-600 rounded-full animate-progress-bar animation-delay-400" style={{ width: '78%' }}></div>
+                                            <div className="h-full bg-linear-to-r from-purple-400 to-purple-600 rounded-full animate-progress-bar animation-delay-400" style={{ width: '78%' }}></div>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div className="mt-6 p-4 bg-blue-50 rounded-xl animate-fade-in animation-delay-600 hover:bg-blue-100 transition-colors duration-300">
                                     <div className="flex items-start gap-3">
-                                        <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+                                        <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center shrink-0">
                                             <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                             </svg>
