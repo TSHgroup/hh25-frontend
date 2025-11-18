@@ -6,7 +6,7 @@ const PublicLayout = () => {
   return (
     <div className="min-h-screen flex flex-col bg-linear-to-br from-blue-50 via-blue-100 to-blue-200">
       <PublicNavbar />
-      <main className="w-full px-4 py-8">
+      <main className="w-full">
         <Outlet />
       </main>
       <PublicFooter />
