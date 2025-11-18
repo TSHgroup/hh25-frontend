@@ -188,7 +188,7 @@ const Features: React.FC = () => {
                                         </svg>
                                     </div>
                                     <div>
-                                        <h4 className="font-bold text-gray-900 mb-1 md:mb-2 text-base md:text-lg">Confidence Score</h4>
+                                        <h4 className="font-bold text-gray-900 mb-1 md:mb-2 text-base md:text-lg">Pewność siebie</h4>
                                         <p className="text-gray-600 leading-relaxed text-sm md:text-base">Analiza stabilności i siły głosu – mierzy, jak pewnie brzmisz</p>
                                     </div>
                                 </div>
@@ -200,7 +200,7 @@ const Features: React.FC = () => {
                                         </svg>
                                     </div>
                                     <div>
-                                        <h4 className="font-bold text-gray-900 mb-1 md:mb-2 text-base md:text-lg">Speech Rate Score</h4>
+                                        <h4 className="font-bold text-gray-900 mb-1 md:mb-2 text-base md:text-lg">Prędkość i rytm mowy</h4>
                                         <p className="text-gray-600 leading-relaxed text-sm md:text-base">Tempo mowy i rytm – sprawdź czy mówisz za szybko lub za wolno</p>
                                     </div>
                                 </div>
@@ -212,7 +212,7 @@ const Features: React.FC = () => {
                                         </svg>
                                     </div>
                                     <div>
-                                        <h4 className="font-bold text-gray-900 mb-1 md:mb-2 text-base md:text-lg">Clarity Score</h4>
+                                        <h4 className="font-bold text-gray-900 mb-1 md:mb-2 text-base md:text-lg">Klarowność mowy</h4>
                                         <p className="text-gray-600 leading-relaxed text-sm md:text-base">Zrozumiałość i płynność – ocena artykulacji i jakości wypowiedzi</p>
                                     </div>
                                 </div>
@@ -224,7 +224,7 @@ const Features: React.FC = () => {
                                         </svg>
                                     </div>
                                     <div>
-                                        <h4 className="font-bold text-gray-900 mb-1 md:mb-2 text-base md:text-lg">Stress Indicator</h4>
+                                        <h4 className="font-bold text-gray-900 mb-1 md:mb-2 text-base md:text-lg">Zestresowanie</h4>
                                         <p className="text-gray-600 leading-relaxed text-sm md:text-base">Wykrywanie stresu na podstawie drżenia i napięcia w głosie</p>
                                     </div>
                                 </div>
@@ -237,7 +237,7 @@ const Features: React.FC = () => {
                                         </svg>
                                     </div>
                                     <div>
-                                        <h4 className="font-bold text-gray-900 mb-1 md:mb-2 text-base md:text-lg">Filler Detection</h4>
+                                        <h4 className="font-bold text-gray-900 mb-1 md:mb-2 text-base md:text-lg">Wykrywanie wtrąceń "yyy" itp.</h4>
                                         <p className="text-gray-600 leading-relaxed text-sm md:text-base">Wykrywanie wtrąceń typu "yyy", "eee", "no wiesz"</p>
                                     </div>
                                 </div>
@@ -302,14 +302,14 @@ const Features: React.FC = () => {
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
                                                     </svg>
                                                 </div>
-                                                <div className="text-sm text-gray-700">
+                                                <div className="text-sm text-gray-700 mt-2">
                                                     <strong>Wtrącenia:</strong> 3x "yyy", 1x "eee"
                                                 </div>
                                             </div>
 
                                             <div className="p-4 md:p-5 bg-blue-50 rounded-xl md:rounded-2xl border border-blue-200">
-                                                <div className="text-sm text-gray-700 leading-relaxed">
-                                                    <strong className="text-blue-700">💡 Wskazówka AI:</strong> Świetnie! Mów wolniej przy kluczowych argumentach, to da Ci więcej pewności siebie.
+                                                <div className="text-sm text-gray-700">
+                                                    <strong>Wskazówka AI:</strong> Świetnie! Mów wolniej przy kluczowych argumentach, to da Ci więcej pewności.
                                                 </div>
                                             </div>
                                         </div>

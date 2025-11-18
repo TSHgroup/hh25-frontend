@@ -48,11 +48,6 @@ const PublicFooter: React.FC = () => {
                         <h3 className="text-white font-bold text-lg mb-6">Firma</h3>
                         <ul className="space-y-2 md:space-y-3 lg:space-y-4">
                             <li>
-                                <Link to="/about" className="text-gray-400 hover:text-white transition-colors duration-300">
-                                    O Nas
-                                </Link>
-                            </li>
-                            <li>
                                 <Link to="/team" className="text-gray-400 hover:text-white transition-colors duration-300">
                                     Zespół
                                 </Link>
@@ -64,7 +59,7 @@ const PublicFooter: React.FC = () => {
                         <h3 className="text-white font-bold text-lg mb-6">Prawne</h3>
                         <ul className="space-y-2 md:space-y-3 lg:space-y-4">
                             <li>
-                                <Link to="/privacy" className="text-gray-400 hover:text-white transition-colors duration-300 text-sm md:text-base">
+                                <Link to="/tos" className="text-gray-400 hover:text-white transition-colors duration-300 text-sm md:text-base">
                                     Polityka Prywatności
                                 </Link>
                             </li>

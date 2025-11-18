@@ -22,24 +22,24 @@ const PublicNavbar: React.FC = () => {
 
                     <nav className="hidden md:flex items-center justify-center gap-8 pl-4 pr-4">
                         <Link to="/#features" className="text-base font-medium text-gray-700 hover:text-blue-600 transition">
-                            Features
+                            Jak to działa?
                         </Link>
                         <Link to="/#about" className="text-base font-medium text-gray-700 hover:text-blue-600 transition">
-                            How it works
+                            Jak zacząć?
                         </Link>
                         <Link to="/#detailed-info" className="text-base font-medium text-gray-700 hover:text-blue-600 transition">
-                            More Info
+                            Więcej informacji
                         </Link>
                     </nav>
 
                     <div className="flex items-center justify-end pl-4 pr-4">
                         <div className="hidden md:flex items-center gap-3 lg:gap-4">
                             <Link to="/login" className="text-base font-medium text-gray-700 px-4 py-2 hover:text-blue-600 transition">
-                                Login
+                                Zaloguj się
                             </Link>
                             <Link to="/signup">
                                 <button className="px-6 py-2.5 bg-blue-600 text-white text-sm font-semibold rounded-lg shadow hover:bg-blue-700 transition">
-                                    Get Started
+                                    Zarejestruj się
                                 </button>
                             </Link>
                         </div>
@@ -64,24 +64,24 @@ const PublicNavbar: React.FC = () => {
                         <div className="px-4 py-4 space-y-4">
                             <nav className="flex flex-col space-y-2">
                                 <Link to="#features" className="px-4 py-2 text-base font-medium text-gray-700 rounded-md hover:bg-gray-50 transition">
-                                    Features
+                                    Jak to działa?
                                 </Link>
                                 <Link to="#about" className="px-4 py-2 text-base font-medium text-gray-700 rounded-md hover:bg-gray-50 transition">
-                                    How it works
+                                    Jak zacząć?
                                 </Link>
                                 <Link to="#pricing" className="px-4 py-2 text-base font-medium text-gray-700 rounded-md hover:bg-gray-50 transition">
-                                    More Info
+                                    Więcej informacji
                                 </Link>
                             </nav>
                             <div className="pt-4 border-t border-gray-200 space-y-3">
                                 <Link to="/login">
                                     <button className="w-full px-4 py-2.5 text-base font-semibold text-blue-600 border-2 border-blue-600 rounded-lg hover:bg-blue-50 transition mb-5">
-                                        Login
+                                        Zaloguj się
                                     </button>
                                 </Link>
                                 <Link to="/signup">
                                     <button className="w-full px-4 py-2.5 text-base font-semibold text-white bg-blue-600 rounded-lg shadow hover:bg-blue-700 transition">
-                                        Get Started
+                                        Zarejestruj się
                                     </button>
                                 </Link>
                             </div>
