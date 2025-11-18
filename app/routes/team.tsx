@@ -23,14 +23,14 @@ export default function Team() {
             role: "Backend Developer",
             bio: "Fullstack backend dev",
             image: "DW",
-            color: "from-purple-500 to-pink-600",
+            color: "from-green-500 to-emerald-600",
         },
         {
             name: "Michał Jendrzejczyk",
             role: "Backend Developer",
             bio: "Fullstack backend dev",
             image: "MJ",
-            color: "from-green-500 to-emerald-600",
+            color: "from-purple-500 to-pink-600",
         },
         {
             name: "Mateusz Makaryk",
