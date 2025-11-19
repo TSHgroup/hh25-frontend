@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useFormik } from "formik";
 
 export function meta() {
     return [
@@ -7,35 +8,45 @@ export function meta() {
     ];
 }
 
+
+
 export default function Signup() {
-    const [givenName, setGivenName] = useState("");
-    const [familyName, setFamilyName] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [message, setMessage] = useState("");
+    const formik = useFormik({
+        initialValues: {
+            givenName: '',
+            familyName: '',
+            email: '',
+            password: ''
+        },
+        onSubmit: async values => {
+            const email = values.email;
+            const givenName = values.givenName;
+            const familyName = values.familyName;
+            const password = values.password;
+            if (!email) return setMessage("Podaj adres e-mail");
+            if (!givenName) return setMessage("Podaj imię");
+            if (!familyName) return setMessage("Podaj nazwisko");
+            if (!password) return setMessage("Podaj hasło");
 
-    const handleSubmit = async () => {
-        if (!email) return setMessage("Podaj adres e-mail");
-        if (!givenName) return setMessage("Podaj imię");
-        if (!familyName) return setMessage("Podaj nazwisko");
-        if (!password) return setMessage("Podaj hasło");
+            try {
+                const res = await fetch("/api/v1/auth/register", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email, password, name: { givenName, familyName } }),
+                });
 
-        try {
-            const res = await fetch("/api/v1/auth/register", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, password, name: { givenName, familyName } }),
-            });
+                const data = await res.json();
 
-            const data = await res.json();
-
-            setMessage(res.ok ? data.message : data.error);
-        } catch {
-            setMessage(
-                "Nie znaleziono serwera. Sprawdź połączenie z internetem"
-            );
+                setMessage(res.ok ? data.message : data.error);
+            } catch {
+                setMessage(
+                    "Nie znaleziono serwera. Sprawdź połączenie z internetem"
+                );
+            }
         }
-    }
+    })
+
+    const [message, setMessage] = useState("");
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-blue-50 via-white to-purple-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -52,7 +63,7 @@ export default function Signup() {
                         <p className="text-gray-600">Stwórz konto i zacznij trening</p>
                     </div>
 
-                    <div className="space-y-6">
+                    <form className="space-y-6" onSubmit={formik.handleSubmit}>
                         <div className="flex gap-4">
                             <div>
                                 <label htmlFor="givenName" className="block text-sm font-semibold text-gray-700 mb-2">
@@ -61,8 +72,7 @@ export default function Signup() {
                                 <input
                                     type="text"
                                     id="givenName"
-                                    value={givenName}
-                                    onChange={(e) => setGivenName(e.target.value)}
+                                    {...formik.getFieldProps('givenName')}
                                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none text-gray-600"
                                     placeholder="Wpisz swoje imię"
                                 />
@@ -75,8 +85,7 @@ export default function Signup() {
                                 <input
                                     type="text"
                                     id="familyName"
-                                    value={familyName}
-                                    onChange={(e) => setFamilyName(e.target.value)}
+                                    {...formik.getFieldProps('familyName')}
                                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none text-gray-600"
                                     placeholder="Wpisz swoje nazwisko"
                                 />
@@ -90,8 +99,7 @@ export default function Signup() {
                             <input
                                 type="email"
                                 id="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
+                                {...formik.getFieldProps('email')}
                                 className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none text-gray-600"
                                 placeholder="twoj@email.com"
                             />
@@ -104,8 +112,7 @@ export default function Signup() {
                             <input
                                 type="password"
                                 id="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
+                                {...formik.getFieldProps('password')}
                                 className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none text-gray-600"
                                 placeholder="Wpisz bezpieczne hasło"
                             />
@@ -120,12 +127,12 @@ export default function Signup() {
                         )}
 
                         <button 
-                            onClick={handleSubmit}
+                            type="submit"
                             className="w-full px-8 py-4 bg-blue-600 text-white text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl hover:bg-blue-700 transition-all duration-300 transform hover:scale-105"
                         >
                             Zarejestruj
                         </button>
-                    </div>
+                    </form>
 
                     <div className="mt-6 text-center">
                         <p className="text-sm text-gray-600">
