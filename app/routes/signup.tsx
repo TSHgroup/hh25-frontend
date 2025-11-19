@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useFormik } from "formik";
+import { useNavigate } from "react-router";
 
 export function meta() {
     return [
@@ -11,6 +12,7 @@ export function meta() {
 
 
 export default function Signup() {
+    const navigate = useNavigate();
     const formik = useFormik({
         initialValues: {
             givenName: '',
@@ -36,6 +38,12 @@ export default function Signup() {
                 });
 
                 const data = await res.json();
+
+                if (res.ok && data.accessToken) {
+                    localStorage.setItem('accessToken', data.accessToken);
+                    localStorage.setItem('refreshToken', data.refreshToken);
+                    return navigate("/dashboard");
+                }
 
                 setMessage(res.ok ? data.message : data.error);
             } catch {
