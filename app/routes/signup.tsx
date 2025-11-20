@@ -16,20 +16,30 @@ interface FormValues {
     password: string;
 }
 
-const validate = (values: FormValues) => {
-    const errors = {password: ''}
+interface ErrorValues {
+    givenName?: string;
+    familyName?: string;
+    email?: string;
+    password?: string;
+}
 
+const validate = (values: FormValues) => {
+    let errors: ErrorValues = {}
+
+    if (!values.givenName) errors.givenName = 'Wymagane';
+    if (!values.familyName) errors.familyName = 'Wymagane';
+    if (!values.email) errors.email = 'Wymagane';
     if (values.password.length < 8) {
-        errors.password = "Password must be at least 8 characters long";
+        errors.password = "Hasło musi zawierać co najmniej 8 znaków";
     }
     if (!/[!@#$%^&*(),.?":{}|<>]/.test(values.password)) {
-        errors.password = "Password must contain a special character";
+        errors.password = "Hasło musi zawierać znak specjalny";
     }
     if (!/[0-9]/.test(values.password)) {
-        errors.password = "Password must contain a number";
+        errors.password = "Hasło musi zawierać liczbę";
     }
     if (!/[A-Z]/.test(values.password)) {
-        errors.password = "Password must contain an uppercase letter";
+        errors.password = "Hasło musi zawierać dużą literę";
     }
     return errors;
 }
@@ -108,6 +118,7 @@ export default function Signup() {
                                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none text-gray-600"
                                     placeholder="Wpisz swoje imię"
                                 />
+                                {formik.touched.givenName && formik.errors.givenName ? <div className="text-red-700 mt-1">{formik.errors.givenName}</div> : null}
                             </div>
 
                             <div>
@@ -121,6 +132,7 @@ export default function Signup() {
                                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none text-gray-600"
                                     placeholder="Wpisz swoje nazwisko"
                                 />
+                                {formik.touched.familyName && formik.errors.familyName ? <div className="text-red-700 mt-1">{formik.errors.familyName}</div> : null}
                             </div>
                         </div>
 
@@ -135,6 +147,7 @@ export default function Signup() {
                                 className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none text-gray-600"
                                 placeholder="twoj@email.com"
                             />
+                            {formik.touched.email && formik.errors.email ? <div className="text-red-700 mt-1">{formik.errors.email}</div> : null}
                         </div>
 
                         <div>
