@@ -9,7 +9,30 @@ export function meta() {
     ];
 }
 
+interface FormValues {
+    givenName: string;
+    familyName: string;
+    email: string;
+    password: string;
+}
 
+const validate = (values: FormValues) => {
+    const errors = {password: ''}
+
+    if (values.password.length < 8) {
+        errors.password = "Password must be at least 8 characters long";
+    }
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(values.password)) {
+        errors.password = "Password must contain a special character";
+    }
+    if (!/[0-9]/.test(values.password)) {
+        errors.password = "Password must contain a number";
+    }
+    if (!/[A-Z]/.test(values.password)) {
+        errors.password = "Password must contain an uppercase letter";
+    }
+    return errors;
+}
 
 export default function Signup() {
     const navigate = useNavigate();
@@ -20,6 +43,7 @@ export default function Signup() {
             email: '',
             password: ''
         },
+        validate,
         onSubmit: async values => {
             const email = values.email;
             const givenName = values.givenName;
@@ -124,6 +148,7 @@ export default function Signup() {
                                 className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 outline-none text-gray-600"
                                 placeholder="Wpisz bezpieczne hasło"
                             />
+                            {formik.touched.password && formik.errors.password ? <div className="text-red-700 mt-1">{formik.errors.password}</div> : null}
                         </div>
 
                         {message && (
