@@ -17,5 +17,6 @@ export default [
         route("dashboard/sessions", "routes/dashboard/dashboard.sessions.tsx"),
         route("dashboard/analytics", "routes/dashboard/dashboard.analytics.tsx"),
         route("dashboard/settings", "routes/dashboard/dashboard.settings.tsx"),
+        route("dashboard/personas", "routes/dashboard/dashboard.personas.tsx"),
     ]),
 ] satisfies RouteConfig;
