@@ -284,13 +284,13 @@ export default function ScenarioCreator() {
                             onChange={handleCategoryChange}
                             required
                             className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black">
-                            <option value="business">Business</option>
-                            <option value="education">Education</option>
-                            <option value="relationships">Relationships</option>
-                            <option value="family">Family</option>
-                            <option value="dates">Dates</option>
-                            <option value="public speaking">Public Speaking</option>
-                            <option value="other">Other</option>
+                            <option value="business">Biznes</option>
+                            <option value="education">Edukacja</option>
+                            <option value="relationships">Relacje</option>
+                            <option value="family">Rodzina</option>
+                            <option value="dates">Randki</option>
+                            <option value="public speaking">Przemówienia</option>
+                            <option value="other">Inne</option>
                         </select>
                     </div>
 
