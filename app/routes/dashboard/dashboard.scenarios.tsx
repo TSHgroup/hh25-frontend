@@ -138,6 +138,43 @@ export default function Scenarios(){
         setActiveTab(tab);
     }
 
+    const handleDeleteScenario = async (scenarioId: string) => {
+        if (!confirm('Czy na pewno chcesz usunąć ten scenariusz?')) return;
+
+        try {
+            const response = await authenticatedFetch(`/api/v1/scenario/${scenarioId}`, {
+                method: 'DELETE',
+            });
+
+            if (!response.ok) {
+                throw new Error('Nie udało się usunąć scenariusza');
+            }
+
+            alert('Scenariusz został usunięty');
+            
+            if (activeTab === 'my') {
+                fetchMyScenarios();
+            } else {
+                fetchAllScenarios(allPage);
+            }
+        } catch (err) {
+            alert(err instanceof Error ? err.message : 'Wystąpił błąd');
+        }
+    };
+
+    const handleEditScenario = (scenarioId: string) => {
+        navigate('/dashboard/scenario-creator', { 
+            state: { 
+                scenarioId,
+                editMode: true
+            } 
+        });
+    };
+
+    const handleStartScenario = (scenarioId: string) => {
+        navigate(`/dashboard/conversation/${scenarioId}`);
+    };
+
     const renderScenarioCard = (scenario: Scenario, isUserScenario: boolean = false) => (
         <div key={scenario._id} className="bg-white rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col">
             <div className="p-4 sm:p-6 flex-1 flex flex-col">
@@ -220,17 +257,25 @@ export default function Scenarios(){
                 </div>
 
                 <div className="flex gap-2">
-                    <button className="flex-1 px-4 py-2.5 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition">
+                    <button 
+                        onClick={() => handleStartScenario(scenario._id)}
+                        className="flex-1 px-4 py-2.5 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition">
                         Rozpocznij
                     </button>
                     {isUserScenario && (
                         <>
-                            <button className="px-4 py-2.5 bg-gray-100 text-gray-700 font-semibold rounded-xl hover:bg-gray-200 transition">
+                            <button 
+                                onClick={() => handleEditScenario(scenario._id)}
+                                className="px-4 py-2.5 bg-gray-100 text-gray-700 font-semibold rounded-xl hover:bg-gray-200 transition"
+                                title="Edytuj scenariusz">
                                 <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
                                 </svg>
                             </button>
-                            <button className="px-4 py-2.5 bg-red-100 text-red-600 font-semibold rounded-xl hover:bg-red-200 transition">
+                            <button 
+                                onClick={() => handleDeleteScenario(scenario._id)}
+                                className="px-4 py-2.5 bg-red-100 text-red-600 font-semibold rounded-xl hover:bg-red-200 transition"
+                                title="Usuń scenariusz">
                                 <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                 </svg>
@@ -241,7 +286,7 @@ export default function Scenarios(){
             </div>
         </div>
     );
-
+    
     const renderEmptyState = (isUserScenarios: boolean) => (
         <div className="bg-white rounded-2xl p-8 sm:p-12 shadow-lg border border-gray-100 text-center">
             <div className="w-16 h-16 sm:w-20 sm:h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">

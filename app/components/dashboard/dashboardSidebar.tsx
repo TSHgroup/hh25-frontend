@@ -26,6 +26,11 @@ const DashboardSidebar: React.FC<DashboardSidebarProps> = ({ isOpen, onClose }) 
       icon: "M12 4v16m8-8H4", 
       label: "Kreator scenariusza" 
     },
+    {
+      path: "/dashboard/personas",
+      icon: "M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z",
+      label: "Persony"
+    },
     { 
       path: "/dashboard/sessions", 
       icon: "M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z", 
