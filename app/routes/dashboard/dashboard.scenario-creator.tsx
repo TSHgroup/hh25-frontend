@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { authenticatedFetch } from '../../utils/api';
 import { useNavigate, useLocation } from 'react-router';
+import PersonaSelectionModal from '../../components/PersonaSelectionModal';
 
 export function meta() {
     return [
@@ -13,6 +14,7 @@ interface Persona {
     _id: string;
     name: string;
     role: string;
+    personality: string;
 }
 
 export default function ScenarioCreator() {
@@ -39,37 +41,62 @@ export default function ScenarioCreator() {
 
     const [personas, setPersonas] = useState<Persona[]>([]);
     const [personasLoading, setPersonasLoading] = useState(true);
+    const [isPersonaModalOpen, setIsPersonaModalOpen] = useState(false);
+    const [selectedPersonaName, setSelectedPersonaName] = useState('');
     const [customCategory, setCustomCategory] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isLoading, setIsLoading] = useState(editMode);
     const [error, setError] = useState<string | null>(null);
 
-    //Ftching personas is not working due to endpoint '/api/v1/persona/user/me'
     useEffect(() => {
-        const fetchPersonas = async () => {
+        const fetchAllAvaiblePersonas = async () => {
             setPersonasLoading(true);
             try {
-                const response = await authenticatedFetch('/api/v1/persona/user/me');
-                if (!response.ok) {
-                    throw new Error('Nie udało się załadować listy person.');
-                }
-                const data = await response.json();
-                
-                console.log("Data received from /api/v1/persona/user/me:", data);
+                const [myPersonasResponse, publicPersonasResponse] = await Promise.allSettled ([
+                    authenticatedFetch('/api/v1/persona/user/me'),
+                    authenticatedFetch('/api/v1/persona?limit=100&page=1'),
+                ]);
 
-                const personaList = data.result || data;
-                setPersonas(Array.isArray(personaList) ? personaList : []);
+                const allPersonas = new Map<string, Persona>();
+
+                if (myPersonasResponse.status === 'fulfilled' && myPersonasResponse.value.ok) {
+                    const myPersonasData = await myPersonasResponse.value.json();
+                    const myPersonasList = Array.isArray(myPersonasData) ? myPersonasData : [];
+                    myPersonasList.forEach(p => allPersonas.set(p._id, p));
+                } else {
+                    console.error("Nie można zfetchować person użytkownika:", myPersonasResponse.status === 'rejected' ? myPersonasResponse.reason : 'Request failed');
+                }
+
+                if (publicPersonasResponse.status === 'fulfilled' && publicPersonasResponse.value.ok) {
+                    const publicPersonasData = await publicPersonasResponse.value.json();
+                    const publicPersonasList = publicPersonasData.result || [];
+                    publicPersonasList.forEach((p: Persona) => allPersonas.set(p._id, p));
+                } else {
+                    console.error("Could not fetch public personas:", publicPersonasResponse.status === 'rejected' ? publicPersonasResponse.reason : 'Request failed');
+                }
+                
+                setPersonas(Array.from(allPersonas.values()));
 
             } catch (err) {
                 console.error("Error fetching personas:", err);
-                setPersonas([]); 
+                setError('Nie udało się załadować listy person.');
+                setPersonas([]);
             } finally {
                 setPersonasLoading(false);
             }
         };
-        fetchPersonas();
+
+        fetchAllAvaiblePersonas();
     }, []);
 
+    useEffect(() => {
+        if (formData.persona && personas.length > 0) {
+            const selected = personas.find(p => p._id === formData.persona);
+            if (selected){
+                setSelectedPersonaName(`${selected.name} (${selected.role})`)
+            }
+        }
+    }, [formData.persona, personas])
 
     useEffect(() => {
         if (editMode && scenarioId) {
@@ -77,7 +104,6 @@ export default function ScenarioCreator() {
                 setIsLoading(true);
                 setError(null);
                 try {
-                    console.log(`Fetching data for scenario ID: ${scenarioId}`);
                     const response = await authenticatedFetch(`/api/v1/scenario/${scenarioId}`);
                     
                     if (!response.ok) {
@@ -122,6 +148,12 @@ export default function ScenarioCreator() {
         if (e.target.value !== 'other') {
             setCustomCategory('');
         }
+    };
+    
+    const handlePersonaSelect = (persona: Persona) => {
+        setFormData(prev => ({ ...prev, persona: persona._id }));
+        setSelectedPersonaName(`${persona.name} (${persona.role})`);
+        setIsPersonaModalOpen(false);
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -251,26 +283,18 @@ export default function ScenarioCreator() {
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
                         Persona *
                     </label>
-                    <select
-                        name="persona"
-                        value={formData.persona}
-                        onChange={handleChange}
-                        required
-                        disabled={personasLoading}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black disabled:bg-gray-100">
-                        {personasLoading ? (
-                            <option>Ładowanie person...</option>
-                        ) : (
-                            <>
-                                <option value="">Wybierz personę</option>
-                                {personas.map(p => (
-                                    <option key={p._id} value={p._id}>
-                                        {p.name} ({p.role})
-                                    </option>
-                                ))}
-                            </>
-                        )}
-                    </select>
+                    <div className="w-full px-4 py-2 border border-gray-300 rounded-xl flex justify-between items-center">
+                        <span className="text-black">
+                            {selectedPersonaName || 'Nie wybrano persony'}
+                        </span>
+                        <button
+                            type="button"
+                            onClick={() => setIsPersonaModalOpen(true)}
+                            className="px-4 py-1 bg-blue-100 text-blue-700 text-sm font-semibold rounded-md hover:bg-blue-200"
+                        >
+                            Wybierz
+                        </button>
+                    </div>
                 </div>
 
                 <div className="grid gap-4" style={{ gridTemplateColumns: '1fr 1fr', gridTemplateAreas: '"a b" "c c"' }}>
@@ -393,6 +417,14 @@ export default function ScenarioCreator() {
                     </button>
                 </div>
             </form>
+
+            <PersonaSelectionModal
+                isOpen={isPersonaModalOpen}
+                onClose={() => setIsPersonaModalOpen(false)}
+                onPersonaSelect={handlePersonaSelect}
+                personas={personas}
+                isLoading={personasLoading}
+            />
         </div>
     );
 }
