@@ -168,7 +168,6 @@ export default function Scenarios(){
         try {
             const response = await authenticatedFetch(`/api/v1/scenario/${scenarioId}/publish`, {
                 method: 'POST',
-                headers: { "Content-Type": "application/json" }
             });
 
             if (!response.ok) {
