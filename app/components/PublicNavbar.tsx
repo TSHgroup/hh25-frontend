@@ -1,8 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router";
 
 const PublicNavbar: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    useEffect(() => {
+            if(window.localStorage.getItem("accessToken")) setIsLoggedIn(true);
+        }, []);
 
     return (
         <header className="sticky top-0 z-50 w-full bg-gray-50 shadow-sm border-b border-gray-200">
@@ -34,6 +39,14 @@ const PublicNavbar: React.FC = () => {
 
                     <div className="flex items-center justify-end pl-4 pr-4">
                         <div className="hidden md:flex items-center gap-3 lg:gap-4">
+                            {isLoggedIn? (
+                            <Link to="/dashboard">
+                                <button className="px-6 py-2.5 bg-blue-600 text-white text-sm font-semibold rounded-lg shadow hover:bg-blue-700 transition">
+                                    Panel użytkownika
+                                </button>
+                            </Link>
+                            ) : (
+                            <>
                             <Link to="/login" className="text-base font-medium text-gray-700 px-4 py-2 hover:text-blue-600 transition">
                                 Zaloguj się
                             </Link>
@@ -42,6 +55,8 @@ const PublicNavbar: React.FC = () => {
                                     Zarejestruj się
                                 </button>
                             </Link>
+                            </>)
+                            }
                         </div>
 
                         <button
