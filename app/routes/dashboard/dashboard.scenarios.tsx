@@ -162,30 +162,6 @@ export default function Scenarios(){
         }
     };
 
-    const handlePublishScenario = async (scenarioId: string) => {
-        if (!confirm('Czy na pewno chcesz opublikować ten scenariusz? Umożliwi to każdemu korzystanie z niego.')) return;
-
-        try {
-            const response = await authenticatedFetch(`/api/v1/scenario/${scenarioId}/publish`, {
-                method: 'POST',
-            });
-
-            if (!response.ok) {
-                throw new Error('Nie udało się opublikować scenariusza');
-            }
-
-            alert('Opublikowano scernariusz');
-            
-            if (activeTab === 'my') {
-                fetchMyScenarios();
-            } else {
-                fetchAllScenarios(allPage);
-            }
-        } catch (err) {
-            alert(err instanceof Error ? err.message : 'Wystąpił błąd');
-        }
-    };
-
     const handleEditScenario = (scenarioId: string) => {
         navigate('/dashboard/scenario-creator', { 
             state: { 
@@ -294,15 +270,6 @@ export default function Scenarios(){
                                 title="Edytuj scenariusz">
                                 <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
-                                </svg>
-                            </button>
-                            <button
-                                onClick={() => handlePublishScenario(scenario._id)}
-                                className="px-4 py-2.5 bg-gray-100 text-gray-700 font-semibold rounded-xl hover:bg-gray-200 transition"
-                                title="Opublikuj scenariusz">
-                                <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" stroke="currentColor" viewBox="0 0 20 22">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M19,19H1c-0.6,0-1-0.4-1-1v-5h2v4h16v-4h2v5C20,18.6,19.6,19,19,19z"/>
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.7,6.3l-5-5c-0.4-0.4-1-0.4-1.4,0l-5,5c-0.4,0.4-0.4,1,0,1.4s1,0.4,1.4,0L9,4.4V13c0,0.6,0.4,1,1,1s1-0.4,1-1V4.4l3.3,3.3C14.5,7.9,14.7,8,15,8s0.5-0.1,0.7-0.3C16.1,7.3,16.1,6.7,15.7,6.3z"/>
                                 </svg>
                             </button>
                             <button 
