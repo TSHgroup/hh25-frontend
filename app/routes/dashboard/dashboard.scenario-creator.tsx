@@ -19,6 +19,7 @@ export default function ScenarioCreator() {
     const navigate = useNavigate();
     const location = useLocation();
 
+
     const scenarioId = location.state?.scenarioId;
     const editMode = location.state?.editMode || false;
     const personaIdFromNav = location.state?.personaId;
@@ -31,43 +32,44 @@ export default function ScenarioCreator() {
         tags: '',
         languages: 'pl',
         objectives: '',
-        persona: 'd5aA2CdBa6d56039aA4790B0',
+        persona: personaIdFromNav || '',
         openingPrompt: '',
         closingPrompt: '',
     });
 
-    // const [personas, setPersonas] = useState<Persona[]>([]);
-    // const [personasLoading, setPersonasLoading] = useState(true);
+    const [personas, setPersonas] = useState<Persona[]>([]);
+    const [personasLoading, setPersonasLoading] = useState(true);
     const [customCategory, setCustomCategory] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isLoading, setIsLoading] = useState(editMode);
     const [error, setError] = useState<string | null>(null);
 
     //Ftching personas is not working due to endpoint '/api/v1/persona/user/me'
-    // useEffect(() => {
-    //     const fetchPersonas = async () => {
-    //         setPersonasLoading(true);
-    //         try {
-    //             const response = await authenticatedFetch('/api/v1/persona/user/me');
-    //             if (!response.ok) {
-    //                 throw new Error('Nie udało się załadować listy person.');
-    //             }
-    //             const data = await response.json();
+    useEffect(() => {
+        const fetchPersonas = async () => {
+            setPersonasLoading(true);
+            try {
+                const response = await authenticatedFetch('/api/v1/persona/user/me');
+                if (!response.ok) {
+                    throw new Error('Nie udało się załadować listy person.');
+                }
+                const data = await response.json();
                 
-    //             console.log("Data received from /api/v1/persona/user/me:", data);
+                console.log("Data received from /api/v1/persona/user/me:", data);
 
-    //             const personaList = data.result || data;
-    //             setPersonas(Array.isArray(personaList) ? personaList : []);
+                const personaList = data.result || data;
+                setPersonas(Array.isArray(personaList) ? personaList : []);
 
-    //         } catch (err) {
-    //             console.error("Error fetching personas:", err);
-    //             setPersonas([]); 
-    //         } finally {
-    //             setPersonasLoading(false);
-    //         }
-    //     };
-    //     fetchPersonas();
-    // }, []);
+            } catch (err) {
+                console.error("Error fetching personas:", err);
+                setPersonas([]); 
+            } finally {
+                setPersonasLoading(false);
+            }
+        };
+        fetchPersonas();
+    }, []);
+
 
     useEffect(() => {
         if (editMode && scenarioId) {
@@ -93,7 +95,7 @@ export default function ScenarioCreator() {
                         tags: (data.tags || []).join(', '),
                         languages: (data.languages || ['pl'])[0],
                         objectives: (data.objectives || []).join(', '),
-                        persona: data.persona || 'd5aA2CdBa6d56039aA4790B0',
+                        persona: data.persona || '',
                         openingPrompt: data.openingPrompt || '',
                         closingPrompt: data.closingPrompt || '',
                     });
@@ -194,13 +196,6 @@ export default function ScenarioCreator() {
                         {editMode ? 'Zaktualizuj szczegóły swojego scenariusza.' : 'Stwórz własny scenariusz treningowy widoczny tylko dla Ciebie'}
                     </p>
                 </div>
-                <button 
-                    onClick={() => navigate('/dashboard/scenarios')}
-                    className="text-gray-500 hover:text-gray-700 transition">
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
             </div>
             
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -252,7 +247,7 @@ export default function ScenarioCreator() {
                         placeholder="Szczegółowy opis scenariusza..."/>
                 </div>
 
-                {/* <div>
+                <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
                         Persona *
                     </label>
@@ -276,7 +271,7 @@ export default function ScenarioCreator() {
                             </>
                         )}
                     </select>
-                </div> */}
+                </div>
 
                 <div className="grid gap-4" style={{ gridTemplateColumns: '1fr 1fr', gridTemplateAreas: '"a b" "c c"' }}>
                     <div style={{ gridArea: 'a' }}>
