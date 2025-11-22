@@ -191,9 +191,9 @@ export default function ConversationPage() {
                     type="text"
                     value={userInput}
                     onChange={(e) => setUserInput(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                    onKeyDown={(e) => e.key === 'Enter' && handleSendMessage()}
                     placeholder="Wpisz wiadomość..."
-                    className="flex-1 px-4 py-2 border rounded-xl"
+                    className="flex-1 px-4 py-2 border rounded-xl text-black"
                 />
                 <button onClick={handleSendMessage} className="px-6 py-2 bg-blue-600 text-white font-semibold rounded-xl">Wyślij</button>
                 <button onClick={() => navigate('/dashboard/scenarios')} className="px-6 py-2 bg-gray-600 text-white font-semibold rounded-xl">Zakończ</button>
