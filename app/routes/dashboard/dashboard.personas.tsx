@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { authenticatedFetch } from '../../utils/api';
 
 export function meta() {
@@ -68,6 +68,9 @@ export default function Person() {
 
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [createError, setCreateError] = useState<string | null>(null);
+    const { personaId } = useParams(); 
+    const editMode = !!personaId;
+    const [formLoading, setFormLoading] = useState(editMode);
 
     const fetchAllPersonas = async (currentPage: number) => {
         setAllLoading(true);
@@ -194,11 +197,14 @@ const handleSubmit = async (e: React.FormEvent) => {
             maxResponseTokens: 150,
         };
 
+        const url = editMode ? `/api/v1/persona/${personaId}` : '/api/v1/persona';
+        const method = editMode ? 'PUT' : 'POST';
+
         console.log('Creating persona with payload:', payload);
 
         try {
-            const response = await authenticatedFetch('/api/v1/persona', {
-                method: 'POST',
+            const response = await authenticatedFetch(url, {
+                method: method,
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -232,7 +238,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                 }
             }
 
-            alert('Persona została pomyślnie utworzona!');
+            alert((editMode)? 'Pomyślnie zaaktualizowano personę!' : 'Persona została pomyślnie utworzona!');
             
             setFormData({
                 name: '',
@@ -247,6 +253,9 @@ const handleSubmit = async (e: React.FormEvent) => {
             });
 
             // Refresh the appropriate tab
+            if (editMode) {
+                navigate(`/dashboard/personas`)
+            }
             if (formData.public) {
                 setActiveTab('all');
                 fetchAllPersonas(1);
@@ -270,6 +279,49 @@ const handleSubmit = async (e: React.FormEvent) => {
             fetchMyPersonas();
         }
     }, [activeTab, allPage]);
+
+    useEffect(() => {
+        if (editMode && personaId) {
+            const fetchPersonaData = async () => {
+                setFormLoading(true);
+                setCreateError(null);
+                try {
+                    const response = await authenticatedFetch(`/api/v1/persona/${personaId}`);
+                    
+                    if (!response.ok) {
+                        console.error('Failed to fetch scenario. Status:', response.status);
+                        throw new Error('Nie udało się załadować danych scenariusza.');
+                    }
+                    
+                    const data = await response.json();
+
+                    setFormData({
+                        name: data.name || '',
+                        role: data.role || '',
+                        personality: data.personality || '',
+                        voice: data.voice || 'Puck',
+                        responseStyle: data.responseStyle || 'conversational',
+                        informations: data.informations || '',
+                        model: data.model || 'neutral',
+                        adapt: data.adapt || true,
+                        public: data.public || false,
+                    });
+
+                } catch (err) {
+                    console.error('Error in fetchPersonaData:', err);
+                    setCreateError(err instanceof Error ? err.message : 'Wystąpił błąd');
+                } finally {
+                    setFormLoading(false);
+                }
+            };
+
+            fetchPersonaData();
+            setActiveTab('create')
+        }
+        else{
+            setActiveTab('all')
+        }
+    }, [personaId, editMode]);
 
     const handlePageChange = (newPage: number) => {
         if (newPage >= 1 && newPage <= allLastPage) {
@@ -371,15 +423,17 @@ const handleSubmit = async (e: React.FormEvent) => {
                                 </svg>
                             </button>
                             <button 
-                                onClick={() => {/* TODO: Edit persona */}}
-                                className="px-4 py-2.5 bg-gray-100 text-gray-700 font-semibold rounded-xl hover:bg-gray-200 transition">
+                                onClick={() => navigate(`/dashboard/personas/${persona._id}`)}
+                                className="px-4 py-2.5 bg-gray-100 text-gray-700 font-semibold rounded-xl hover:bg-gray-200 transition"
+                                title="Edytuj">
                                 <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
                                 </svg>
                             </button>
                             <button 
                                 onClick={() => handleDeletePersona(persona._id)}
-                                className="px-4 py-2.5 bg-red-100 text-red-600 font-semibold rounded-xl hover:bg-red-200 transition">
+                                className="px-4 py-2.5 bg-red-100 text-red-600 font-semibold rounded-xl hover:bg-red-200 transition"
+                                title="Usuń">
                                 <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                 </svg>
@@ -565,7 +619,9 @@ const handleSubmit = async (e: React.FormEvent) => {
                         type="submit"
                         disabled={isSubmitting}
                         className="flex-1 px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed">
-                        {isSubmitting ? 'Tworzenie...' : 'Utwórz personę'}
+                        {(editMode)? 
+                        (isSubmitting ? 'Aktualizacja...' : 'Zaaktualizuj personę') 
+                        : (isSubmitting ? 'Tworzenie...' : 'Utwórz personę')}
                     </button>
                 </div>
             </form>
