@@ -13,7 +13,7 @@ export default [
     layout("layouts/dashboardLayout.tsx", [
         route("dashboard", "routes/dashboard/dashboard.tsx"),
         route("dashboard/scenarios", "routes/dashboard/dashboard.scenarios.tsx"),
-        route("dashboard/scenario-creator", "routes/dashboard/dashboard.scenario-creator.tsx"),
+        route("dashboard/scenario-creator/:scenarioId?", "routes/dashboard/dashboard.scenario-creator.tsx"),
         route("dashboard/conversation/:scenarioId", "routes/dashboard/dashboard.conversation.$scenarioId.tsx"),
         route("dashboard/sessions", "routes/dashboard/dashboard.sessions.tsx"),
         route("dashboard/analytics", "routes/dashboard/dashboard.analytics.tsx"),

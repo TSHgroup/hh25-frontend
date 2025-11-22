@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { authenticatedFetch } from '../../utils/api';
-import { useNavigate, useLocation } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import PersonaSelectionModal from '../../components/PersonaSelectionModal';
 
 export function meta() {
@@ -17,15 +17,21 @@ interface Persona {
     personality: string;
 }
 
+interface Round {
+    prompt: string;
+    expectedResponseType: string;
+    emotion: string;
+    userEmotionTarget: string;
+    tips: string[];
+    keywordsRequired: string[];
+    keywordsBanned: string[];
+}
+
 export default function ScenarioCreator() {
     const navigate = useNavigate();
-    const location = useLocation();
-
-
-    const scenarioId = location.state?.scenarioId;
-    const editMode = location.state?.editMode || false;
-    const personaIdFromNav = location.state?.personaId;
-
+    const { scenarioId } = useParams(); 
+    const editMode = !!scenarioId;
+    
     const [formData, setFormData] = useState({
         title: '',
         subtitle: '',
@@ -34,9 +40,10 @@ export default function ScenarioCreator() {
         tags: '',
         languages: 'pl',
         objectives: '',
-        persona: personaIdFromNav || '',
+        persona: '',
         openingPrompt: '',
-        closingPrompt: '',
+        // closingPrompt: '',
+        rounds: [] as Round[],
     });
 
     const [personas, setPersonas] = useState<Persona[]>([]);
@@ -47,6 +54,7 @@ export default function ScenarioCreator() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isLoading, setIsLoading] = useState(editMode);
     const [error, setError] = useState<string | null>(null);
+    const [newRoundPrompt, setNewRoundPrompt] = useState('');
 
     useEffect(() => {
         const fetchAllAvaiblePersonas = async () => {
@@ -121,9 +129,10 @@ export default function ScenarioCreator() {
                         tags: (data.tags || []).join(', '),
                         languages: (data.languages || ['pl'])[0],
                         objectives: (data.objectives || []).join(', '),
-                        persona: data.persona || '',
+                        persona: data.persona?._id || data.persona || '',
                         openingPrompt: data.openingPrompt || '',
-                        closingPrompt: data.closingPrompt || '',
+                        // closingPrompt: data.closingPrompt || '',
+                        rounds: data.rounds || [],
                     });
 
                 } catch (err) {
@@ -156,6 +165,38 @@ export default function ScenarioCreator() {
         setIsPersonaModalOpen(false);
     };
 
+    const handleAddRound = () => {
+        if (newRoundPrompt.trim()) {
+            const newRound: Round = {
+                prompt: newRoundPrompt.trim(),
+                expectedResponseType: 'text',
+                emotion: 'neutral',
+                userEmotionTarget: 'neutral',
+                tips: [],
+                keywordsRequired: [],
+                keywordsBanned: [],
+            };
+            setFormData(prev => ({
+                ...prev,
+                rounds: [...prev.rounds, newRound]
+            }));
+            setNewRoundPrompt('');
+        }
+    };
+
+    const handleRemoveRound = (indexToRemove: number) => {
+        setFormData(prev => ({
+            ...prev,
+            rounds: prev.rounds.filter((_, index) => index !== indexToRemove)
+        }))
+    }
+
+    if (formData.rounds.length === 0) {
+            setError('Musisz dodać przynajmniej jedną rundę do scenariusza.');
+            setIsSubmitting(false);
+            return;
+    }
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSubmitting(true);
@@ -179,7 +220,8 @@ export default function ScenarioCreator() {
                 objectives: formData.objectives ? formData.objectives.split(',').map(obj => obj.trim()).filter(Boolean) : [],
                 persona: formData.persona, 
                 openingPrompt: formData.openingPrompt,
-                closingPrompt: formData.closingPrompt,
+                // closingPrompt: formData.closingPrompt,
+                rounds: formData.rounds,
                 provider: 'gemini',
                 model: 'gemini-2.5-flash-native-audio-preview-09-2025',
             };
@@ -389,7 +431,7 @@ export default function ScenarioCreator() {
                         placeholder="Jak AI ma rozpocząć rozmowę..."/>
                 </div>
 
-                <div>
+                {/* <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
                         Prompt końcowy
                     </label>
@@ -400,6 +442,43 @@ export default function ScenarioCreator() {
                         rows={3}
                         className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
                         placeholder="Jak AI ma zakończyć rozmowę..."/>
+                </div> */}
+
+                <div className="border-t border-gray-200 pt-4">
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        Rundy Scenariusza (Podscenariusze)
+                    </label>
+                    <div className="space-y-2">
+                        {formData.rounds.map((round, index) => (
+                            <div key={index} className="flex items-center gap-2 bg-gray-50 p-2 rounded-lg">
+                                <span className="flex-1 text-sm text-gray-800">{round.prompt}</span>
+                                <button
+                                    type="button"
+                                    onClick={() => handleRemoveRound(index)}
+                                    className="p-1 text-red-500 hover:text-red-700"
+                                    title="Usuń rundę"
+                                >
+                                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" /></svg>
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+                    <div className="flex gap-2 mt-3">
+                        <input
+                            type="text"
+                            value={newRoundPrompt}
+                            onChange={(e) => setNewRoundPrompt(e.target.value)}
+                            className="flex-1 px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
+                            placeholder="Wpisz treść nowej rundy..."
+                        />
+                        <button
+                            type="button"
+                            onClick={handleAddRound}
+                            className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-xl hover:bg-blue-600"
+                        >
+                            Dodaj
+                        </button>
+                    </div>
                 </div>
 
                 <div className="flex gap-3 pt-4">
