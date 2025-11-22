@@ -202,6 +202,26 @@ export default function ScenarioCreator() {
             return;
         }
 
+        if (!formData.objectives.trim()) {
+            setError('Musisz podać przynajmniej jeden cel scenariusza.');
+            setIsSubmitting(false);
+            return;
+        }
+
+        // DODANO: Walidacja promptu początkowego
+        if (!formData.openingPrompt.trim()) {
+            setError('Prompt początkowy jest wymagany.');
+            setIsSubmitting(false);
+            return;
+        }
+
+        // Walidacja rund
+        if (formData.rounds.length === 0) {
+            setError('Musisz dodać przynajmniej jedną rundę do scenariusza.');
+            setIsSubmitting(false);
+            return;
+        }
+
         try {
             const payload = {
                 title: formData.title,
@@ -401,7 +421,7 @@ export default function ScenarioCreator() {
 
                 <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
-                        Cele (oddzielone przecinkami)
+                        Cele (oddzielone przecinkami) *
                     </label>
                     <input
                         type="text"
@@ -414,7 +434,7 @@ export default function ScenarioCreator() {
 
                 <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
-                        Prompt początkowy
+                        Prompt początkowy * 
                     </label>
                     <textarea
                         name="openingPrompt"
