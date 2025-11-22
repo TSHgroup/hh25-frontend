@@ -21,13 +21,13 @@ interface Scenario {
     objectives: string[];
     persona: string;
     openingPrompt: string;
-    closingPrompt: string;
+    // closingPrompt: string;
     provider: string;
     model: string;
     createdBy: string;
     lastUpdatedAt: string;
     ai: { provider: string; model: string };
-    rounds: any[];
+    rounds: { _id: string, prompt: string}[];
     createdAt: string;
     isPrivate?: boolean;
 }
@@ -234,6 +234,27 @@ export default function Scenarios(){
                 <p className="text-xs sm:text-sm text-gray-700 mb-4 line-clamp-3 flex-1">
                     {scenario.description}
                 </p>
+
+                {Array.isArray(scenario.rounds) && scenario.rounds.length > 0 ? (
+                    <div className="mb-4 border-t border-gray-200 pt-3">
+                        <h4 className="text-xs font-bold text-gray-500 uppercase mb-2">Rundy ({scenario.rounds.length})</h4>
+                        <div className="space-y-1">
+                            {scenario.rounds.slice(0, 2).map((round, idx) => (
+                                <div key={round._id || idx} className="flex items-center gap-2 text-xs text-gray-600">
+                                    <svg className="w-3 h-3 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
+                                    <span className="truncate">{round.prompt || "Bez nazwy"}</span>
+                                </div>
+                            ))}
+                            {scenario.rounds.length > 2 && (
+                                <p className="text-xs text-gray-500 pl-5">...i {scenario.rounds.length - 2} więcej</p>
+                            )}
+                        </div>
+                    </div>
+                ) : (
+                    <div className="mb-4 border-t border-gray-200 pt-3">
+                        <p className="text-xs text-red-500 italic">Brak zdefiniowanych rund</p>
+                    </div>
+                )}
                 
                 <div className="space-y-3 mb-4">
                     <div className="flex items-start gap-2">
@@ -289,7 +310,7 @@ export default function Scenarios(){
                     {isUserScenario && (
                         <>
                             <button 
-                                onClick={() => handleEditScenario(scenario._id)}
+                                onClick={() => navigate(`/dashboard/scenario-creator/${scenario._id}`)}
                                 className="px-4 py-2.5 bg-gray-100 text-gray-700 font-semibold rounded-xl hover:bg-gray-200 transition"
                                 title="Edytuj scenariusz">
                                 <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
