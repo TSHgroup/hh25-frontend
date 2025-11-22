@@ -191,12 +191,6 @@ export default function ScenarioCreator() {
         }))
     }
 
-    if (formData.rounds.length === 0) {
-            setError('Musisz dodać przynajmniej jedną rundę do scenariusza.');
-            setIsSubmitting(false);
-            return;
-    }
-
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSubmitting(true);
