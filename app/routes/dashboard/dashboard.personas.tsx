@@ -289,22 +289,22 @@ const handleSubmit = async (e: React.FormEvent) => {
                     const response = await authenticatedFetch(`/api/v1/persona/${personaId}`);
                     
                     if (!response.ok) {
-                        console.error('Failed to fetch scenario. Status:', response.status);
-                        throw new Error('Nie udało się załadować danych scenariusza.');
+                        console.error('Failed to fetch persona. Status:', response.status);
+                        throw new Error('Nie udało się załadować danych persony.');
                     }
                     
                     const data = await response.json();
 
                     setFormData({
-                        name: data.name || '',
-                        role: data.role || '',
-                        personality: data.personality || '',
-                        voice: data.voice || 'Puck',
-                        responseStyle: data.responseStyle || 'conversational',
-                        informations: data.informations || '',
-                        model: data.model || 'neutral',
-                        adapt: data.adapt || true,
-                        public: data.public || false,
+                        name: data.name ?? '',
+                        role: data.role ?? '',
+                        personality: data.personality ?? '',
+                        voice: data.voice ?? 'Puck',
+                        responseStyle: data.responseStyle ?? 'conversational',
+                        informations: data.informations ?? '',
+                        model: data.model ?? 'neutral',
+                        adapt: data.adapt ?? true,
+                        public: data.public ?? false,
                     });
 
                 } catch (err) {
