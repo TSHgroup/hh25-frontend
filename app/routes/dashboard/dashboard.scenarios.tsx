@@ -25,6 +25,7 @@ interface Scenario {
     provider: string;
     model: string;
     createdBy: string;
+    public: boolean;
     lastUpdatedAt: string;
     ai: { provider: string; model: string };
     rounds: { _id: string, prompt: string}[];
@@ -119,14 +120,13 @@ export default function Scenarios(){
     };
 
     useEffect(() => {
-        fetchAllScenarios(allPage);
-    }, [allPage]);
-
-    useEffect(() => {
-        if(activeTab === 'my'){
+        if(activeTab === 'my') {
             fetchMyScenarios();
         }
-    }, [activeTab]);
+        else {
+            fetchAllScenarios(allPage);
+        }
+    }, [activeTab, allPage]);
 
     const handlePageChange = (newPage: number) => {
         if (newPage >= 1 && newPage <= allLastPage){
@@ -162,19 +162,23 @@ export default function Scenarios(){
         }
     };
     
-    const handlePublishScenario = async (scenarioId: string) => {
-        if (!confirm('Czy na pewno chcesz opublikować ten scenariusz? Umożliwi to każdemu korzystanie z niego.')) return;
-
+    const handleTogglePublishScenario = async (scenarioId: string, currentPublic: boolean) => {
+        const message = currentPublic
+            ? 'Czy na pewno chcesz cofnąć publikację tego scenariusza? Uniemożliwi to innnym korzystanie z niego.'
+            : 'Czy na pewno chcesz opublikować ten scenariusz? Umożliwi to każdemu korzystanie z niego.'
+        if (!confirm(message)) return;
+        
+        const method = currentPublic ? 'DELETE' : 'POST';
         try {
             const response = await authenticatedFetch(`/api/v1/scenario/${scenarioId}/publish`, {
-                method: 'POST',
+                method: method,
             });
 
             if (!response.ok) {
-                throw new Error('Nie udało się opublikować scenariusza');
+                throw new Error('Nie udało się zmienić statusu scenariusza');
             }
 
-            alert('Opublikowano scernariusz');
+            alert(currentPublic? 'Cofnięto publikację scenariusza' : 'Opublikowano scernariusz');
             
             if (activeTab === 'my') {
                 fetchMyScenarios();
@@ -317,13 +321,16 @@ export default function Scenarios(){
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/>
                                 </svg>
                             </button>
-                            <button
-                                onClick={() => handlePublishScenario(scenario._id)}
+                            <button 
+                                onClick={() => handleTogglePublishScenario(scenario._id, scenario.public)}
                                 className="px-4 py-2.5 bg-gray-100 text-gray-700 font-semibold rounded-xl hover:bg-gray-200 transition"
-                                title="Opublikuj scenariusz">
-                                <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" stroke="currentColor" viewBox="0 0 20 22">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M19,19H1c-0.6,0-1-0.4-1-1v-5h2v4h16v-4h2v5C20,18.6,19.6,19,19,19z"/>
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M15.7,6.3l-5-5c-0.4-0.4-1-0.4-1.4,0l-5,5c-0.4,0.4-0.4,1,0,1.4s1,0.4,1.4,0L9,4.4V13c0,0.6,0.4,1,1,1s1-0.4,1-1V4.4l3.3,3.3C14.5,7.9,14.7,8,15,8s0.5-0.1,0.7-0.3C16.1,7.3,16.1,6.7,15.7,6.3z"/>
+                                title={scenario.public ? 'Ukryj' : 'Opublikuj'}>
+                                <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    {scenario.public ? (
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/>
+                                    ) : (
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                    )}
                                 </svg>
                             </button>
                             <button 
