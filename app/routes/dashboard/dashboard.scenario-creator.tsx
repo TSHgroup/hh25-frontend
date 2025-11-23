@@ -202,8 +202,22 @@ export default function ScenarioCreator() {
             return;
         }
 
-        if (formData.rounds.length < 1) {
-            setError('Musisz dodać co najmniej 1 rundę.');
+        if (!formData.objectives.trim()) {
+            setError('Musisz podać przynajmniej jeden cel scenariusza.');
+            setIsSubmitting(false);
+            return;
+        }
+
+        // DODANO: Walidacja promptu początkowego
+        if (!formData.openingPrompt.trim()) {
+            setError('Prompt początkowy jest wymagany.');
+            setIsSubmitting(false);
+            return;
+        }
+
+        // Walidacja rund
+        if (formData.rounds.length === 0) {
+            setError('Musisz dodać przynajmniej jedną rundę do scenariusza.');
             setIsSubmitting(false);
             return;
         }
