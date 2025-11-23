@@ -239,7 +239,6 @@ export default function ScenarioCreator() {
                 provider: 'gemini',
                 model: 'gemini-2.5-flash-native-audio-preview-09-2025',
             };
-
             const url = editMode ? `/api/v1/scenario/${scenarioId}` : '/api/v1/scenario';
             const method = editMode ? 'PUT' : 'POST';
 
@@ -428,18 +427,20 @@ export default function ScenarioCreator() {
                         name="objectives"
                         value={formData.objectives}
                         onChange={handleChange}
+                        required
                         className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
                         placeholder="np. Opanowanie podstaw negocjacji, Nauka małych rozmów"/>
                 </div>
 
                 <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">
-                        Prompt początkowy * 
+                        Prompt początkowy *
                     </label>
                     <textarea
                         name="openingPrompt"
                         value={formData.openingPrompt}
                         onChange={handleChange}
+                        required
                         rows={3}
                         className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
                         placeholder="Jak AI ma rozpocząć rozmowę..."/>
