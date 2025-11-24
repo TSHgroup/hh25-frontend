@@ -27,6 +27,12 @@ interface Persona {
     createdAt: string;
 }
 
+interface Voice {
+    name: string,
+    gender: string, 
+    style: string,
+}
+
 interface ApiResponse {
     result: Persona[];
     page: number;
@@ -52,13 +58,15 @@ export default function Person() {
     const [myLoading, setMyLoading] = useState(false);
     const [myError, setMyError] = useState<string | null>(null);
 
+    const [voices, setVoices] = useState<Voice[]>([])
+ 
     const [limit] = useState(12);
 
     const [formData, setFormData] = useState({
         name: '',
         role: '',
         personality: '',
-        voice: 'Puck',
+        voice: '',
         responseStyle: 'conversational',
         informations: '',
         model: 'neutral',
@@ -71,6 +79,28 @@ export default function Person() {
     const { personaId } = useParams(); 
     const editMode = !!personaId;
     const [formLoading, setFormLoading] = useState(editMode);
+
+    useEffect(() => {
+        const fetchVoices = async () => {
+            try {
+                const response = await authenticatedFetch('/api/v1/ai/voices');
+                if (response.ok) {
+                    const data = await response.json();
+                    // Obsługa tablicy bezpośrednio lub zagnieżdżonej w obiekcie (zależnie od API)
+                    const voiceList = Array.isArray(data) ? data : (data.voices || []);
+                    setVoices(voiceList);
+                    
+                    // Ustaw domyślny głos jeśli lista nie jest pusta i nie wybrano głosu
+                    if (voiceList.length > 0 && !formData.voice && !editMode) {
+                        setFormData(prev => ({ ...prev, voice: voiceList[0].name }));
+                    }
+                }
+            } catch (err) {
+                console.error("Nie udało się pobrać listy głosów:", err);
+            }
+        };
+        fetchVoices();
+    }, []);
 
     const fetchAllPersonas = async (currentPage: number) => {
         setAllLoading(true);
@@ -224,7 +254,6 @@ const handleSubmit = async (e: React.FormEvent) => {
             const responseData = await response.json();
             console.log('Success response:', responseData);
 
-            // If user wanted it public, publish it immediately
             if (formData.public && responseData._id) {
                 console.log('Publishing persona...');
                 const publishResponse = await authenticatedFetch(`/api/v1/persona/${responseData._id}/publish`, {
@@ -244,7 +273,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                 name: '',
                 role: '',
                 personality: '',
-                voice: 'Puck',
+                voice: '',
                 responseStyle: 'conversational',
                 informations: '',
                 model: 'neutral',
@@ -252,7 +281,6 @@ const handleSubmit = async (e: React.FormEvent) => {
                 public: false,
             });
 
-            // Refresh the appropriate tab
             if (editMode) {
                 navigate(`/dashboard/personas`)
             }
@@ -260,7 +288,6 @@ const handleSubmit = async (e: React.FormEvent) => {
                 setActiveTab('all');
                 fetchAllPersonas(1);
             } else {
-                // Since /user/me endpoint doesn't work, go to all personas
                 setActiveTab('all');
                 fetchAllPersonas(1);
             }
@@ -299,7 +326,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                         name: data.name ?? '',
                         role: data.role ?? '',
                         personality: data.personality ?? '',
-                        voice: data.voice ?? 'Puck',
+                        voice: data.voice,
                         responseStyle: data.responseStyle ?? 'conversational',
                         informations: data.informations ?? '',
                         model: data.model ?? 'neutral',
@@ -384,6 +411,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                         </svg>
                         <span>Głos: {persona.voice}</span>
                     </div>
+                    </div>
                     <div className="flex items-center gap-2">
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
@@ -442,7 +470,6 @@ const handleSubmit = async (e: React.FormEvent) => {
                     )}
                 </div>
             </div>
-        </div>
     );
 
     const renderEmptyState = (isUserPersonas: boolean) => (
@@ -545,13 +572,19 @@ const handleSubmit = async (e: React.FormEvent) => {
                 <div className="grid grid-cols-2 gap-4">
                     <div>
                         <label className="block text-sm font-semibold text-gray-700 mb-2">Głos</label>
-                        <input
-                            type="text"
+                        <select
                             name="voice"
                             value={formData.voice}
                             onChange={handleChange}
                             className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
-                            placeholder="np. Puck"/>
+                        >
+                            <option value="">Wybierz głos</option>
+                            {voices.map((v) => (
+                                <option key={v.name} value={v.name}>
+                                    {v.name} ({v.gender === 'MALE' ? 'Męski' : v.gender === 'FEMALE' ? 'Żeński' : v.gender} - {v.style})
+                                </option>
+                            ))}
+                        </select>
                     </div>
 
                     <div>
