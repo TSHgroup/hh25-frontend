@@ -17,13 +17,6 @@ interface Persona {
     personality: string;
 }
 
-interface Voice {
-    name: string, 
-    ssmlGender: string,
-    languageCodes: string[],
-    naturalSampleRateHertz?: number
-}
-
 interface Round {
     prompt: string;
     expectedResponseType: string;
@@ -48,14 +41,12 @@ export default function ScenarioCreator() {
         languages: 'pl',
         objectives: '',
         persona: '',
-        voice: '',
         openingPrompt: '',
         // closingPrompt: '',
         rounds: [] as Round[],
     });
 
     const [personas, setPersonas] = useState<Persona[]>([]);
-    const [voices, setVoices] = useState<Voice[]>([]);
     const [personasLoading, setPersonasLoading] = useState(true);
     const [isPersonaModalOpen, setIsPersonaModalOpen] = useState(false);
     const [selectedPersonaName, setSelectedPersonaName] = useState('');
@@ -69,10 +60,9 @@ export default function ScenarioCreator() {
         const fetchAllAvaiblePersonas = async () => {
             setPersonasLoading(true);
             try {
-                const [myPersonasResponse, publicPersonasResponse, voicesResponse] = await Promise.allSettled ([
+                const [myPersonasResponse, publicPersonasResponse] = await Promise.allSettled ([
                     authenticatedFetch('/api/v1/persona/user/me'),
                     authenticatedFetch('/api/v1/persona?limit=100&page=1'),
-                    authenticatedFetch('/api/v1/ai/voices'),
                 ]);
 
                 const allPersonas = new Map<string, Persona>();
@@ -94,15 +84,6 @@ export default function ScenarioCreator() {
                 }
                 
                 setPersonas(Array.from(allPersonas.values()));
-
-                if (voicesResponse.status === 'fulfilled' && voicesResponse.value.ok) {
-                    const voicesData = await voicesResponse.value.json();
-                    // Obsługa różnych formatów odpowiedzi API (tablica lub obiekt z polem voices)
-                    const voicesList = Array.isArray(voicesData) ? voicesData : (voicesData.voices || []);
-                    setVoices(voicesList);
-                } else {
-                    console.error("Nie udało się pobrać głosów");
-                }
 
             } catch (err) {
                 console.error("Error fetching personas:", err);
@@ -149,7 +130,6 @@ export default function ScenarioCreator() {
                         languages: (data.languages || ['pl'])[0],
                         objectives: (data.objectives || []).join(', '),
                         persona: data.persona?._id || data.persona || '',
-                        voice: data.voice || '',
                         openingPrompt: data.openingPrompt || '',
                         // closingPrompt: data.closingPrompt || '',
                         rounds: data.rounds || [],
@@ -251,7 +231,6 @@ export default function ScenarioCreator() {
                 status: 'editing',
                 objectives: formData.objectives ? formData.objectives.split(',').map(obj => obj.trim()).filter(Boolean) : [],
                 persona: formData.persona,
-                voice: formData.voice,
                 openingPrompt: formData.openingPrompt,
                 // closingPrompt: formData.closingPrompt,
                 rounds: formData.rounds,
@@ -281,20 +260,6 @@ export default function ScenarioCreator() {
         } finally {
             setIsSubmitting(false);
         }
-    };
-
-    const formatVoiceLabel = (voice: Voice) => {
-        const genderMap: Record<string, string> = {
-            'MALE': 'Męski',
-            'FEMALE': 'Żeński',
-            'NEUTRAL': 'Neutralny'
-        };
-        const gender = genderMap[voice.ssmlGender] || voice.ssmlGender;
-        // Próba wyciągnięcia typu z nazwy (np. en-US-Neural2-A -> Neural2)
-        const parts = voice.name.split('-');
-        const type = parts.length > 2 ? parts[parts.length - 2] : 'Standard';
-        
-        return `${voice.name} (${gender}, ${type})`;
     };
 
     if (isLoading) {
@@ -367,42 +332,20 @@ export default function ScenarioCreator() {
                         placeholder="Szczegółowy opis scenariusza..."/>
                 </div>
 
-                <div className="grid gap-4" style={{ gridTemplateColumns: '1fr 1fr', gridTemplateAreas: '"a b"' }}>
-                    <div style={{ gridArea: 'a' }}>
-                        <label className="block text-sm font-semibold text-gray-700 mb-2">
-                            Persona *
-                        </label>
-                        <div className="w-full px-4 py-2 border border-gray-300 rounded-xl flex justify-between items-center bg-white">
-                            <span className="text-black truncate mr-2">
-                                {selectedPersonaName || 'Nie wybrano persony'}
-                            </span>
-                            <button
-                                type="button"
-                                onClick={() => setIsPersonaModalOpen(true)}
-                                className="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded-md hover:bg-blue-200 shrink-0"
-                            >
-                                Wybierz
-                            </button>
-                        </div>
-                    </div>
-
-                    <div style={{ gridArea: 'b' }}>
-                        <label className="block text-sm font-semibold text-gray-700 mb-2">
-                            Głos AI
-                        </label>
-                        <select
-                            name="voice"
-                            value={formData.voice}
-                            onChange={handleChange}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-black"
-                        >
-                            <option value="">Domyślny głos modelu</option>
-                            {voices.map((voice) => (
-                                <option key={voice.name} value={voice.name}>
-                                    {formatVoiceLabel(voice)}
-                                </option>
-                            ))}
-                        </select>
+                <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        Persona *
+                    </label>
+                    <div className="w-full px-4 py-2 border border-gray-300 rounded-xl flex justify-between items-center bg-white">
+                        <span className="text-black truncate mr-2">
+                            {selectedPersonaName || 'Nie wybrano persony'}
+                        </span>
+                        <button
+                            type="button"
+                            onClick={() => setIsPersonaModalOpen(true)}
+                            className="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded-md hover:bg-blue-200 shrink-0">
+                            Wybierz
+                        </button>
                     </div>
                 </div>
 
