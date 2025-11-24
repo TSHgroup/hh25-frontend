@@ -581,7 +581,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                             <option value="">Wybierz głos</option>
                             {voices.map((v) => (
                                 <option key={v.name} value={v.name}>
-                                    {v.name} ({v.gender === 'MALE' ? 'Męski' : v.gender === 'FEMALE' ? 'Żeński' : v.gender} - {v.style})
+                                    {v.name} ({v.gender === 'male' ? 'męski' : v.gender === 'female' ? 'żeński' : v.gender} - {v.style})
                                 </option>
                             ))}
                         </select>
