@@ -257,7 +257,7 @@ const Features: React.FC = () => {
                                     <div className="space-y-6 md:space-y-8">
                                         <div className="group">
                                             <div className="flex justify-between mb-2 md:mb-3">
-                                                <span className="text-sm font-semibold text-gray-700">Pewność Siebie</span>
+                                                <span className="text-sm font-semibold text-gray-700">Emocje</span>
                                                 <span className="text-sm font-bold text-green-600">87%</span>
                                             </div>
                                             <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
@@ -267,7 +267,7 @@ const Features: React.FC = () => {
 
                                         <div className="group">
                                             <div className="flex justify-between mb-2 md:mb-3">
-                                                <span className="text-sm font-semibold text-gray-700">Tempo Mowy</span>
+                                                <span className="text-sm font-semibold text-gray-700">Płynność</span>
                                                 <span className="text-sm font-bold text-blue-600">92%</span>
                                             </div>
                                             <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
@@ -277,7 +277,7 @@ const Features: React.FC = () => {
 
                                         <div className="group">
                                             <div className="flex justify-between mb-2 md:mb-3">
-                                                <span className="text-sm font-semibold text-gray-700">Klarowność</span>
+                                                <span className="text-sm font-semibold text-gray-700">Słownictwo</span>
                                                 <span className="text-sm font-bold text-purple-600">78%</span>
                                             </div>
                                             <div className="h-3 bg-gray-100 rounded-full overflow-hidden">

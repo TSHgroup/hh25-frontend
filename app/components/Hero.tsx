@@ -61,7 +61,7 @@ const Hero: React.FC = () => {
                                 <div className="space-y-4">
                                     <div className="animate-slide-in-right animation-delay-300">
                                         <div className="flex justify-between text-sm mb-2">
-                                            <span className="text-gray-600">Pewność Siebie</span>
+                                            <span className="text-gray-600">Emocje</span>
                                             <span className="font-bold text-green-600">87%</span>
                                         </div>
                                         <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
@@ -71,7 +71,7 @@ const Hero: React.FC = () => {
 
                                     <div className="animate-slide-in-right animation-delay-400">
                                         <div className="flex justify-between text-sm mb-2">
-                                            <span className="text-gray-600">Tempo Mowy</span>
+                                            <span className="text-gray-600">Płynność</span>
                                             <span className="font-bold text-blue-600">92%</span>
                                         </div>
                                         <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
@@ -81,7 +81,7 @@ const Hero: React.FC = () => {
 
                                     <div className="animate-slide-in-right animation-delay-500">
                                         <div className="flex justify-between text-sm mb-2">
-                                            <span className="text-gray-600">Klarowność</span>
+                                            <span className="text-gray-600">Słownictwo</span>
                                             <span className="font-bold text-purple-600">78%</span>
                                         </div>
                                         <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
