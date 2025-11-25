@@ -10,10 +10,10 @@ const Features: React.FC = () => {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                     <div className="text-center mb-12 md:mb-16 lg:mb-20">
                         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 md:mb-6">
-                            Jak <span className="text-blue-600">OdpalGadkę</span> Działa?
+                            Skupiamy się na tym, co <span className="text-blue-600">najważniejsze</span>
                         </h2>
                         <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed px-4">
-                            Zaawansowana analiza mowy i sztuczna inteligencja tworzą realistyczne scenariusze dopasowane do twoich celów
+                            Nasza AI analizuje kluczowe aspekty mowy, dając Ci realne narzędzia do budowania pewności siebie.
                         </p>
                     </div>
 
@@ -21,97 +21,37 @@ const Features: React.FC = () => {
                         <div className="group bg-linear-to-br from-blue-50 to-white p-6 md:p-8 lg:p-10 rounded-2xl md:rounded-3xl border border-blue-100 hover:shadow-2xl hover:scale-105 transition-all duration-500">
                             <div className="w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 bg-linear-to-br from-blue-600 to-blue-700 rounded-xl md:rounded-2xl flex items-center justify-center mb-6 md:mb-8 group-hover:scale-110 transition-transform duration-300 shadow-lg">
                                 <svg className="w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                 </svg>
                             </div>
-                            <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-3 md:mb-4">Realistyczne Scenariusze</h3>
+                            <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-3 md:mb-4">Analiza Emocji</h3>
                             <p className="text-gray-600 mb-4 md:mb-6 leading-relaxed text-sm md:text-base">
-                                Ćwicz rozmowy z AI, które reaguje jak prawdziwy człowiek – od spotkań biznesowych po randki
+                                Zrozum, jak brzmisz dla innych. AI rozpoznaje ton Twojego głosu, pomagając Ci świadomie zarządzać emocjami i unikać nieporozumień.
                             </p>
-                            <ul className="space-y-2 md:space-y-3 text-sm text-gray-600">
-                                <li className="flex items-center gap-2 md:gap-3">
-                                    <svg className="w-4 h-4 md:w-5 md:h-5 text-green-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7"/>
-                                    </svg>
-                                    <span className="text-sm md:text-base">Wystąpienia publiczne</span>
-                                </li>
-                                <li className="flex items-center gap-2 md:gap-3">
-                                    <svg className="w-4 h-4 md:w-5 md:h-5 text-green-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7"/>
-                                    </svg>
-                                    <span className="text-sm md:text-base">Rozmowy biznesowe</span>
-                                </li>
-                                <li className="flex items-center gap-2 md:gap-3">
-                                    <svg className="w-4 h-4 md:w-5 md:h-5 text-green-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7"/>
-                                    </svg>
-                                    <span className="text-sm md:text-base">Sytuacje społeczne</span>
-                                </li>
-                            </ul>
                         </div>
 
                         <div className="group bg-linear-to-br from-purple-50 to-white p-6 md:p-8 lg:p-10 rounded-2xl md:rounded-3xl border border-purple-100 hover:shadow-2xl hover:scale-105 transition-all duration-500">
                             <div className="w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 bg-linear-to-br from-purple-600 to-purple-700 rounded-xl md:rounded-2xl flex items-center justify-center mb-6 md:mb-8 group-hover:scale-110 transition-transform duration-300 shadow-lg">
                                 <svg className="w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z"/>
                                 </svg>
                             </div>
-                            <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-3 md:mb-4">Zaawansowana Analiza</h3>
+                            <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-3 md:mb-4">Ocena Płynności</h3>
                             <p className="text-gray-600 mb-4 md:mb-6 leading-relaxed text-sm md:text-base">
-                                Otrzymuj szczegółowe metryki po każdej sesji i obserwuj swój postęp w czasie rzeczywistym
+                                Koniec z "yyy" i "eee". Monitorujemy płynność Twojej wypowiedzi, identyfikując przerwy i wahania, abyś mówił płynnie i bezstresowo.
                             </p>
-                            <ul className="space-y-2 md:space-y-3 text-sm text-gray-600">
-                                <li className="flex items-center gap-2 md:gap-3">
-                                    <svg className="w-4 h-4 md:w-5 md:h-5 text-green-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7"/>
-                                    </svg>
-                                    <span className="text-sm md:text-base">Analiza pewności głosu</span>
-                                </li>
-                                <li className="flex items-center gap-2 md:gap-3">
-                                    <svg className="w-4 h-4 md:w-5 md:h-5 text-green-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7"/>
-                                    </svg>
-                                    <span className="text-sm md:text-base">Wykrywanie wtrąceń "yyy"</span>
-                                </li>
-                                <li className="flex items-center gap-2 md:gap-3">
-                                    <svg className="w-4 h-4 md:w-5 md:h-5 text-green-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7"/>
-                                    </svg>
-                                    <span className="text-sm md:text-base">Poziom stresu w głosie</span>
-                                </li>
-                            </ul>
                         </div>
 
                         <div className="group bg-linear-to-br from-green-50 to-white p-6 md:p-8 lg:p-10 rounded-2xl md:rounded-3xl border border-green-100 hover:shadow-2xl hover:scale-105 transition-all duration-500">
                             <div className="w-12 h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 bg-linear-to-br from-green-600 to-green-700 rounded-xl md:rounded-2xl flex items-center justify-center mb-6 md:mb-8 group-hover:scale-110 transition-transform duration-300 shadow-lg">
                                 <svg className="w-6 h-6 md:w-7 md:h-7 lg:w-8 lg:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h7"/>
                                 </svg>
                             </div>
-                            <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-3 md:mb-4">Spersonalizowane Wskazówki</h3>
+                            <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-3 md:mb-4">Dobór Słownictwa</h3>
                             <p className="text-gray-600 mb-4 md:mb-6 leading-relaxed text-sm md:text-base">
-                                AI generuje dokładne rady, jak poprawić twój styl komunikacji i eliminować błędy
+                                Wyrażaj myśli precyzyjnie. Otrzymasz sugestie dotyczące używanych słów, co pozwoli Ci wzbogacić język i brzmieć bardziej profesjonalnie.
                             </p>
-                            <ul className="space-y-2 md:space-y-3 text-sm text-gray-600">
-                                <li className="flex items-center gap-2 md:gap-3">
-                                    <svg className="w-4 h-4 md:w-5 md:h-5 text-green-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7"/>
-                                    </svg>
-                                    <span className="text-sm md:text-base">Raporty po każdej sesji</span>
-                                </li>
-                                <li className="flex items-center gap-2 md:gap-3">
-                                    <svg className="w-4 h-4 md:w-5 md:h-5 text-green-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7"/>
-                                    </svg>
-                                    <span className="text-sm md:text-base">Ćwiczenia dopasowane do ciebie</span>
-                                </li>
-                                <li className="flex items-center gap-2 md:gap-3">
-                                    <svg className="w-4 h-4 md:w-5 md:h-5 text-green-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7"/>
-                                    </svg>
-                                    <span className="text-sm md:text-base">Śledzenie postępów</span>
-                                </li>
-                            </ul>
                         </div>
                     </div>
                 </div>
@@ -177,19 +117,19 @@ const Features: React.FC = () => {
                                 Szczegółowe Metryki Komunikacyjne
                             </h2>
                             <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 mb-8 md:mb-12 leading-relaxed">
-                                Po każdej sesji otrzymujesz kompleksowy raport analizujący wszystkie aspekty twojej wypowiedzi
+                                Po każdej sesji otrzymujesz kompleksowy raport analizujący kluczowe aspekty Twojej wypowiedzi.
                             </p>
 
                             <div className="space-y-6 md:space-y-8">
                                 <div className="flex gap-4 md:gap-5 group">
-                                    <div className="w-12 h-12 md:w-14 md:h-14 bg-linear-to-br from-green-100 to-green-50 rounded-xl md:rounded-2xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300">
-                                        <svg className="w-6 h-6 md:w-7 md:h-7 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    <div className="w-12 h-12 md:w-14 md:h-14 bg-linear-to-br from-purple-100 to-purple-50 rounded-xl md:rounded-2xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300">
+                                        <svg className="w-6 h-6 md:w-7 md:h-7 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                         </svg>
                                     </div>
                                     <div>
-                                        <h4 className="font-bold text-gray-900 mb-1 md:mb-2 text-base md:text-lg">Pewność siebie</h4>
-                                        <p className="text-gray-600 leading-relaxed text-sm md:text-base">Analiza stabilności i siły głosu – mierzy, jak pewnie brzmisz</p>
+                                        <h4 className="font-bold text-gray-900 mb-1 md:mb-2 text-base md:text-lg">Analiza Emocji</h4>
+                                        <p className="text-gray-600 leading-relaxed text-sm md:text-base">AI rozpoznaje ton Twojego głosu, pomagając Ci lepiej zrozumieć i kontrolować emocje podczas rozmowy.</p>
                                     </div>
                                 </div>
 
@@ -200,45 +140,20 @@ const Features: React.FC = () => {
                                         </svg>
                                     </div>
                                     <div>
-                                        <h4 className="font-bold text-gray-900 mb-1 md:mb-2 text-base md:text-lg">Prędkość i rytm mowy</h4>
-                                        <p className="text-gray-600 leading-relaxed text-sm md:text-base">Tempo mowy i rytm – sprawdź czy mówisz za szybko lub za wolno</p>
+                                        <h4 className="font-bold text-gray-900 mb-1 md:mb-2 text-base md:text-lg">Ocena Płynności</h4>
+                                        <p className="text-gray-600 leading-relaxed text-sm md:text-base">Monitorujemy płynność Twojej wypowiedzi, identyfikując przerwy i wahania, abyś mówił bardziej płynnie.</p>
                                     </div>
                                 </div>
 
                                 <div className="flex gap-4 md:gap-5 group">
-                                    <div className="w-12 h-12 md:w-14 md:h-14 bg-linear-to-br from-purple-100 to-purple-50 rounded-xl md:rounded-2xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300">
-                                        <svg className="w-6 h-6 md:w-7 md:h-7 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/>
+                                    <div className="w-12 h-12 md:w-14 md:h-14 bg-linear-to-br from-green-100 to-green-50 rounded-xl md:rounded-2xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300">
+                                        <svg className="w-6 h-6 md:w-7 md:h-7 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h7"/>
                                         </svg>
                                     </div>
                                     <div>
-                                        <h4 className="font-bold text-gray-900 mb-1 md:mb-2 text-base md:text-lg">Klarowność mowy</h4>
-                                        <p className="text-gray-600 leading-relaxed text-sm md:text-base">Zrozumiałość i płynność – ocena artykulacji i jakości wypowiedzi</p>
-                                    </div>
-                                </div>
-
-                                <div className="flex gap-4 md:gap-5 group">
-                                    <div className="w-12 h-12 md:w-14 md:h-14 bg-linear-to-br from-red-100 to-red-50 rounded-xl md:rounded-2xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300">
-                                        <svg className="w-6 h-6 md:w-7 md:h-7 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <h4 className="font-bold text-gray-900 mb-1 md:mb-2 text-base md:text-lg">Zestresowanie</h4>
-                                        <p className="text-gray-600 leading-relaxed text-sm md:text-base">Wykrywanie stresu na podstawie drżenia i napięcia w głosie</p>
-                                    </div>
-                                </div>
-
-                                <div className="flex gap-4 md:gap-5 group">
-                                    <div className="w-12 h-12 md:w-14 md:h-14 bg-linear-to-br from-orange-100 to-orange-50 rounded-xl md:rounded-2xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300">
-                                        <svg className="w-6 h-6 md:w-7 md:h-7 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <h4 className="font-bold text-gray-900 mb-1 md:mb-2 text-base md:text-lg">Wykrywanie wtrąceń "yyy" itp.</h4>
-                                        <p className="text-gray-600 leading-relaxed text-sm md:text-base">Wykrywanie wtrąceń typu "yyy", "eee", "no wiesz"</p>
+                                        <h4 className="font-bold text-gray-900 mb-1 md:mb-2 text-base md:text-lg">Dobór Słownictwa</h4>
+                                        <p className="text-gray-600 leading-relaxed text-sm md:text-base">Otrzymasz sugestie dotyczące używanych słów, co pozwoli Ci wzbogacić język i precyzyjniej wyrażać myśli.</p>
                                     </div>
                                 </div>
                             </div>
@@ -277,39 +192,23 @@ const Features: React.FC = () => {
 
                                         <div className="group">
                                             <div className="flex justify-between mb-2 md:mb-3">
-                                                <span className="text-sm font-semibold text-gray-700">Słownictwo</span>
-                                                <span className="text-sm font-bold text-purple-600">78%</span>
+                                                <span className="font-semibold text-gray-700 text-sm md:text-base">Słownictwo</span>
+                                                <span className="font-bold text-gray-900 text-sm md:text-base">78%</span>
                                             </div>
                                             <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
-                                                <div className="h-full bg-linear-to-r from-purple-400 to-purple-600 rounded-full transition-all duration-1000 group-hover:scale-x-105" style={{ width: '78%' }}></div>
-                                            </div>
-                                        </div>
-
-                                        <div className="group">
-                                            <div className="flex justify-between mb-2 md:mb-3">
-                                                <span className="text-sm font-semibold text-gray-700">Poziom Stresu</span>
-                                                <span className="text-sm font-bold text-orange-600">Niski (25%)</span>
-                                            </div>
-                                            <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
-                                                <div className="h-full bg-linear-to-r from-orange-400 to-orange-600 rounded-full transition-all duration-1000 group-hover:scale-x-105" style={{ width: '25%' }}></div>
+                                                <div className="h-full bg-linear-to-r from-green-400 to-green-600 rounded-full animate-progress-bar animation-delay-400" style={{ width: '78%' }}></div>
                                             </div>
                                         </div>
 
                                         <div className="pt-4 md:pt-6 border-t-2 border-gray-100">
-                                            <div className="flex items-start gap-2 md:gap-3 mb-4">
-                                                <div className="w-8 h-8 bg-orange-600 rounded-full flex items-center justify-center shrink-0">
+                                            <div className="flex items-start gap-3">
+                                                <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center shrink-0">
                                                     <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                                     </svg>
                                                 </div>
-                                                <div className="text-sm text-gray-700 mt-2">
-                                                    <strong>Wtrącenia:</strong> 3x "yyy", 1x "eee"
-                                                </div>
-                                            </div>
-
-                                            <div className="p-4 md:p-5 bg-blue-50 rounded-xl md:rounded-2xl border border-blue-200">
                                                 <div className="text-sm text-gray-700">
-                                                    <strong>Wskazówka AI:</strong> Świetnie! Mów wolniej przy kluczowych argumentach, to da Ci więcej pewności.
+                                                    <strong>Wskazówka AI:</strong> Świetnie! Twoja płynność jest na wysokim poziomie. Spróbuj teraz użyć bardziej zróżnicowanego słownictwa, aby jeszcze lepiej wyrazić swoje myśli.
                                                 </div>
                                             </div>
                                         </div>

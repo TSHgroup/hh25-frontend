@@ -16,23 +16,23 @@ const Hero: React.FC = () => {
                     <div className="space-y-8 animate-fade-in-up">
                         <div className="inline-block animate-fade-in">
                             <span className="px-5 py-2.5 bg-blue-100 text-blue-700 rounded-full text-sm font-semibold shadow-sm">
-                                Twój osobisty trener rozmów
+                                Twój osobisty trener AI
                             </span>
                         </div>
 
                         <h1 className="text-5xl lg:text-6xl xl:text-7xl font-bold text-gray-900 leading-tight">
-                            Odpal<span className="text-blue-600 inline-block hover:scale-105 transition-transform duration-300">Gadke</span> i mów z pewnością siebie
+                            Przełam barierę w komunikacji. <span className="text-blue-600 inline-block hover:scale-105 transition-transform duration-300">Mów swobodnie.</span>
                         </h1>
 
                         <p className="text-xl lg:text-2xl text-gray-600 leading-relaxed">
-                            Inteligentny trener rozmów, który przygotuje cię do najtrudniejszych sytuacji społecznych – wystąpienie, rozmowa z rodzicami czy pierwsza randka.
+                            Poczuj się pewnie w każdej rozmowie. Nasza AI analizuje Twoje emocje, płynność i słownictwo, dając Ci narzędzia do przełamania lęku społecznego.
                         </p>
 
                         <div className="flex flex-col sm:flex-row gap-4 pt-4">
                             <Link 
                                 to="/signup" 
                                 className="group px-8 py-4 bg-blue-600 text-white text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 text-center relative overflow-hidden">
-                                <span className="relative z-10">Zacznij Trening</span>
+                                <span className="relative z-10">Rozpocznij trening</span>
                                 <div className="absolute inset-0 bg-linear-to-r from-blue-600 to-blue-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                             </Link>
                             <a 
@@ -54,7 +54,7 @@ const Hero: React.FC = () => {
                                     </div>
                                     <div>
                                         <div className="font-bold text-gray-900">Trening Aktywny</div>
-                                        <div className="text-sm text-gray-600">Rozmowa z Menadżerem</div>
+                                        <div className="text-sm text-gray-600">Rozmowa o pracę</div>
                                     </div>
                                 </div>
 
@@ -62,7 +62,7 @@ const Hero: React.FC = () => {
                                     <div className="animate-slide-in-right animation-delay-300">
                                         <div className="flex justify-between text-sm mb-2">
                                             <span className="text-gray-600">Emocje</span>
-                                            <span className="font-bold text-green-600">87%</span>
+                                            <span className="font-bold text-green-600">Stabilne</span>
                                         </div>
                                         <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
                                             <div className="h-full bg-linear-to-r from-green-400 to-green-600 rounded-full animate-progress-bar" style={{ width: '87%' }}></div>
@@ -72,7 +72,7 @@ const Hero: React.FC = () => {
                                     <div className="animate-slide-in-right animation-delay-400">
                                         <div className="flex justify-between text-sm mb-2">
                                             <span className="text-gray-600">Płynność</span>
-                                            <span className="font-bold text-blue-600">92%</span>
+                                            <span className="font-bold text-blue-600">Wysoka</span>
                                         </div>
                                         <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
                                             <div className="h-full bg-linear-to-r from-blue-400 to-blue-600 rounded-full animate-progress-bar animation-delay-200" style={{ width: '92%' }}></div>
@@ -82,7 +82,7 @@ const Hero: React.FC = () => {
                                     <div className="animate-slide-in-right animation-delay-500">
                                         <div className="flex justify-between text-sm mb-2">
                                             <span className="text-gray-600">Słownictwo</span>
-                                            <span className="font-bold text-purple-600">78%</span>
+                                            <span className="font-bold text-purple-600">Bogate</span>
                                         </div>
                                         <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
                                             <div className="h-full bg-linear-to-r from-purple-400 to-purple-600 rounded-full animate-progress-bar animation-delay-400" style={{ width: '78%' }}></div>
@@ -98,7 +98,7 @@ const Hero: React.FC = () => {
                                             </svg>
                                         </div>
                                         <div className="text-sm text-gray-700">
-                                            <strong>Wskazówka AI:</strong> Świetnie! Mów wolniej przy kluczowych argumentach, to da Ci więcej pewności.
+                                            <strong>Wskazówka AI:</strong> Świetnie! Zauważyłem, że używasz bogatego słownictwa. Spróbuj teraz utrzymać ten sam spokój, odpowiadając na trudniejsze pytanie.
                                         </div>
                                     </div>
                                 </div>
