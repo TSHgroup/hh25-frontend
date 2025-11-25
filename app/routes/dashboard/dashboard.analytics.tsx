@@ -163,8 +163,7 @@ export default function AnalyticsPage() {
                             onClick={() => setSpan(s)}
                             className={`flex-1 sm:flex-none text-center px-3 sm:px-4 py-2 text-sm font-semibold rounded-lg transition ${
                                 span === s ? 'bg-white text-blue-600 shadow' : 'text-gray-600 hover:bg-gray-200'
-                            }`}
-                        >
+                            }`}>
                             {s === '7d' ? '7 Dni' : s === '30d' ? '30 Dni' : '1 Rok'}
                         </button>
                     ))}
@@ -175,14 +174,12 @@ export default function AnalyticsPage() {
                 <StatCard 
                     title="Liczba rozmów" 
                     value={analyticsData.analytics.conversations} 
-                    trend={analyticsData.trends.conversations} 
-                />
+                    trend={analyticsData.trends.conversations} />
                 <StatCard 
                     title="Łączny czas rozmów" 
                     value={(analyticsData.analytics.totalLength / 60).toFixed(1)} 
                     trend={analyticsData.trends.totalLength}
-                    unit=" min"
-                />
+                    unit=" min" />
                  <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 text-center md:col-span-2 lg:col-span-1">
                     <p className="text-sm font-semibold text-gray-600">Passa treningowa</p>
                     <p className="text-4xl font-bold text-blue-600 my-2">{analyticsData.currentStreak}</p>

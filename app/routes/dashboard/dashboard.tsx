@@ -31,7 +31,6 @@ interface AnalyticsData {
     analytics: Analytics;
 }
 
-// Komponent StatCard dla analityki
 const StatCard = ({ title, value, trend, unit = '' }: { title: string, value: string | number, trend: number | null, unit?: string }) => {
     const hasValidTrend = typeof trend === 'number' && isFinite(trend);
     const isPositive = hasValidTrend && trend >= 0;
@@ -57,7 +56,6 @@ const StatCard = ({ title, value, trend, unit = '' }: { title: string, value: st
     );
 };
 
-// Komponent StatsCard dla statystyk dashboardu
 const StatsCard = ({ title, value, icon, trend, color }: { title: string, value: string, icon: string, trend: { value: number, isPositive: boolean }, color: string }) => {
     const colorClasses = {
         blue: 'bg-blue-500',
@@ -88,11 +86,9 @@ const StatsCard = ({ title, value, icon, trend, color }: { title: string, value:
 
 export default function Dashboard() {
     const navigate = useNavigate();
-    // Dodane stany dla analityki
     const [analyticsData, setAnalyticsData] = useState<AnalyticsData | null>(null);
     const [analyticsLoading, setAnalyticsLoading] = useState(true);
 
-    // Dodany useEffect do pobrania analityki
     useEffect(() => {
         const fetchAnalytics = async () => {
             setAnalyticsLoading(true);
@@ -128,7 +124,6 @@ export default function Dashboard() {
                 </Link>
             </div>
 
-            {/* Dodana sekcja analityki */}
             <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
                 <div className="flex items-center justify-between mb-6">
                     <h2 className="text-xl font-bold text-gray-900">Twoje statystyki</h2>
