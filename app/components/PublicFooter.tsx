@@ -24,7 +24,7 @@ const PublicFooter: React.FC = () => {
                     </div>
 
                     <div>
-                        <h3 className="text-white font-bold text-sm md:text-base lg:text-lg mb-3 md:mb-4 lg:mb-6">Produkt</h3>
+                        <h3 className="text-white font-bold text-sm md:text-base lg:text-lg mb-3 md:mb-4 lg:mb-6">Projekt</h3>
                         <ul className="space-y-2 md:space-y-3 lg:space-y-4">
                             <li>
                                 <Link to="/#features" className="text-gray-400 hover:text-white transition-colors duration-300 text-sm md:text-base">
@@ -41,17 +41,17 @@ const PublicFooter: React.FC = () => {
                                     Dashboard
                                 </Link>
                             </li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h3 className="text-white font-bold text-lg mb-6">&nbsp;</h3>
+                        <ul className="space-y-2 md:space-y-3 lg:space-y-4">
                             <li>
                                 <Link to="/mobile" className="text-gray-400 hover:text-white transition-colors duration-300 text-sm md:text-base flex items-center gap-2">
                                     Aplikacja mobilna
                                 </Link>
                             </li>
-                        </ul>
-                    </div>
-
-                    <div>
-                        <h3 className="text-white font-bold text-lg mb-6">Firma</h3>
-                        <ul className="space-y-2 md:space-y-3 lg:space-y-4">
                             <li>
                                 <Link to="/team" className="text-gray-400 hover:text-white transition-colors duration-300">
                                     Zespół
