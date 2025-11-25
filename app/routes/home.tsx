@@ -6,8 +6,8 @@ import Gif from "../components/Gif";
 
 export function meta({}: Route.MetaArgs){
     return [
-        { title: "OdpalGadkę - Trenuj Komunikację z AI" },
-        { name: "description", content: "Przełam bariery w komunikacji. OdpalGadkę to Twój osobisty trener AI, który pomoże Ci mówić pewniej i swobodniej, analizując emocje, płynność i słownictwo." }
+        { title: "OdpalGadke - Trenuj Komunikację z AI" },
+        { name: "description", content: "Przełam bariery w komunikacji. OdpalGadke to Twój osobisty trener AI, który pomoże Ci mówić pewniej i swobodniej, analizując emocje, płynność i słownictwo." }
     ];
 }
 

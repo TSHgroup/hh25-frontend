@@ -7,7 +7,7 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarEleme
 
 export function meta() {
     return [
-        { title: "Analityka - OdpalGadkę" },
+        { title: "Analityka - OdpalGadke" },
         { name: "description", content: "Detailed analytics of your performance" }
     ];
 }

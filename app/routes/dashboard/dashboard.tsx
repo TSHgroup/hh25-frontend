@@ -4,7 +4,7 @@ import { authenticatedFetch } from '../../utils/api';
 
 export function meta() {
     return [
-        { title: "Dashboard - OdpalGadkę" },
+        { title: "Dashboard - OdpalGadke" },
         { name: "description", content: "Your personal training dashboard" }
     ];
 }

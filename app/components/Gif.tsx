@@ -9,7 +9,7 @@ const Gif: React.FC = () => {
 					<iframe 
 						className="w-full aspect-video" 
 						src="https://odpalgadke.q1000q.cc/video/1" 
-						title="Prezentacja wideo aplikacji OdpalGadkę" 
+						title="Prezentacja wideo aplikacji OdpalGadke" 
 						frameBorder="0" 
 						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
 						allowFullScreen>

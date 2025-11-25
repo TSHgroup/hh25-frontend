@@ -16,7 +16,7 @@ const PublicFooter: React.FC = () => {
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/>
                                 </svg>
                             </div>
-                            <span className="text-2xl font-bold text-white">OdpalGadkę</span>
+                            <span className="text-2xl font-bold text-white">OdpalGadke</span>
                         </div>
                         <p className="text-gray-400 text-sm leading-relaxed mb-3 md:mb-4 lg:mb-6">
                             Inteligentny trener rozmów, który uczy mówić pewnie i swobodnie w każdej sytuacji.
@@ -70,7 +70,7 @@ const PublicFooter: React.FC = () => {
                 <div className="pt-8 border-t border-gray-700">
                     <div className="flex flex-col md:flex-row justify-between items-center gap-3 md:gap-4">
                         <div className="text-gray-400 text-xs md:text-sm text-center md:text-left">
-                            © {currentYear} <span className="font-semibold text-white">OdpalGadkę</span>. Wszystkie prawa zastrzeżone.
+                            © {currentYear} <span className="font-semibold text-white">OdpalGadke</span>. Wszystkie prawa zastrzeżone.
                         </div>
                         
                         <div className="flex items-center gap-2 text-sm">
