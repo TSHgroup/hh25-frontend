@@ -35,6 +35,9 @@ const PublicNavbar: React.FC = () => {
                         <Link to="/#detailed-info" className="text-center text-base font-medium text-gray-700 hover:text-blue-600 transition">
                             Metryki
                         </Link>
+                        <Link to="/mobile" className="text-base font-medium text-gray-700 hover:text-blue-600 transition flex items-center gap-2">
+                            Aplikacja mobilna
+                        </Link>
                     </nav>
 
                     <div className="flex items-center justify-end pl-4 pr-4">
@@ -86,6 +89,9 @@ const PublicNavbar: React.FC = () => {
                                 </Link>
                                 <Link to="#detailed-info" className="px-4 py-2 text-base font-medium text-gray-700 rounded-md hover:bg-gray-50 transition">
                                     Metryki
+                                </Link>
+                                <Link to="/mobile" className="text-base font-medium text-gray-700 hover:text-blue-600 transition flex items-center gap-2">
+                                        Aplikacja mobilna
                                 </Link>
                             </nav>
                             <div className="pt-4 border-t border-gray-200 space-y-3">

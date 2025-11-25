@@ -59,17 +59,6 @@ const PublicFooter: React.FC = () => {
                             </li>
                         </ul>
                     </div>
-
-                    <div>
-                        <h3 className="text-white font-bold text-lg mb-6">Prawne</h3>
-                        <ul className="space-y-2 md:space-y-3 lg:space-y-4">
-                            <li>
-                                <Link to="/tos" className="text-gray-400 hover:text-white transition-colors duration-300 text-sm md:text-base">
-                                    Polityka Prywatności
-                                </Link>
-                            </li>
-                        </ul>
-                    </div>
                 </div>
 
                 <div className="pt-8 border-t border-gray-700">
