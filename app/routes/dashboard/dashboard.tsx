@@ -188,8 +188,8 @@ export default function Dashboard() {
                                     <p className="text-xs sm:text-sm text-gray-600">2 godziny temu</p>
                                 </div>
                                 <div className="text-right shrink-0">
-                                    <div className="text-xl sm:text-2xl font-bold text-green-600">87%</div>
-                                    <p className="text-xs text-gray-500">Pewność</p>
+                                    <div className="text-xl sm:text-2xl font-bold text-green-600">92%</div>
+                                    <p className="text-xs text-gray-500">Płynność</p>
                                 </div>
                             </div>
                         ))}
