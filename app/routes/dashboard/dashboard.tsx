@@ -66,6 +66,10 @@ interface Conversation {
     updatedAt: string;
 }
 
+interface DailyTip {
+    tip: string;
+}
+
 const StatCardSkeleton = () => (
     <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-lg border border-gray-100 animate-pulse">
         <div className="h-4 bg-gray-200 rounded w-24 mb-3"></div>
@@ -133,6 +137,8 @@ export default function Dashboard() {
     const [analyticsLoading, setAnalyticsLoading] = useState(true);
     const [conversations, setConversations] = useState<Conversation[]>([]);
     const [conversationsLoading, setConversationsLoading] = useState(true);
+    const [dailyTip, setDailyTip] = useState<string | null>(null);
+    const [tipLoading, setTipLoading] = useState(true);
 
     useEffect(() => {
         const fetchAnalytics = async () => {
@@ -168,6 +174,27 @@ export default function Dashboard() {
             }
         };
         fetchConversations();
+    }, []);
+
+    useEffect(() => {
+        const fetchDailyTip = async () => {
+            setTipLoading(true);
+            try {
+                const response = await authenticatedFetch('/api/v1/daily-tip');
+                if (response.ok) {
+                    const data: DailyTip = await response.json();
+                    setDailyTip(data.tip);
+                } else {
+                    setDailyTip(null);
+                }
+            } catch (err) {
+                console.error('Nie udało się pobrać wskazówki dnia:', err);
+                setDailyTip(null);
+            } finally {
+                setTipLoading(false);
+            }
+        };
+        fetchDailyTip();
     }, []);
 
     return (
@@ -314,10 +341,24 @@ export default function Dashboard() {
 
                 <div className="bg-linear-to-br from-blue-500 to-purple-600 rounded-2xl p-4 sm:p-6 shadow-lg text-white">
                     <h2 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4">Dzisiejsza Wskazówka</h2>
-                    <p className="text-sm sm:text-base text-blue-50 mb-4 sm:mb-6 leading-relaxed">
-                        Przykładowy tip: Pamiętaj, aby robić krótkie pauzy między zdaniami. To daje Ci czas na zebranie myśli i sprawia, że brzmisz pewniej.
-                    </p>
-                    <button className="w-full px-4 py-2.5 sm:py-3 bg-white text-blue-600 text-sm sm:text-base font-semibold rounded-xl hover:shadow-xl transition">
+                    {tipLoading ? (
+                        <div className="mb-4 sm:mb-6">
+                            <div className="h-4 bg-blue-400 rounded w-full mb-2 animate-pulse"></div>
+                            <div className="h-4 bg-blue-400 rounded w-3/4 animate-pulse"></div>
+                        </div>
+                    ) : dailyTip ? (
+                        <p className="text-sm sm:text-base text-blue-50 mb-4 sm:mb-6 leading-relaxed">
+                            {dailyTip}
+                        </p>
+                    ) : (
+                        <p className="text-sm sm:text-base text-blue-50 mb-4 sm:mb-6 leading-relaxed">
+                            Pamiętaj, aby robić krótkie pauzy między zdaniami. To daje Ci czas na zebranie myśli i sprawia, że brzmisz pewniej.
+                        </p>
+                    )}
+                    <button 
+                        onClick={() => navigate('/dashboard/scenarios')}
+                        className="w-full px-4 py-2.5 sm:py-3 bg-white text-blue-600 text-sm sm:text-base font-semibold rounded-xl hover:shadow-xl transition"
+                    >
                         Rozpocznij Trening
                     </button>
                 </div>
