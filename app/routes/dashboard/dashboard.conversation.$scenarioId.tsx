@@ -2,9 +2,17 @@ import { useEffect, useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { authenticatedFetch } from '../../utils/api';
 
+interface UserData {
+    name: string;
+    email: string;
+    profilePictureUrl?: string;
+}
+
 interface Message {
     type: 'user' | 'ai' | 'system' | 'transcription';
     content: string;
+    audioData?: string;
+    isVoiceMessage?: boolean;
 }
 
 interface ScenarioData {
@@ -28,6 +36,9 @@ export default function ConversationPage() {
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
     const [isRecording, setIsRecording] = useState(false);
     const [isMuted, setIsMuted] = useState(false);
+    const [isAudioEnabled, setIsAudioEnabled] = useState(true);
+    const [isAiTyping, setIsAiTyping]= useState(false);
+    const [showAudioErrorPopup, setShowAudioErrorPopup] = useState(false);
     const mediaRecorderRef = useRef<MediaRecorder | null>(null);
     const audioStreamRef = useRef<MediaStream | null>(null);
     const audioChunksRef = useRef<Blob[]>([]);
@@ -37,6 +48,14 @@ export default function ConversationPage() {
     };
 
     const handleSocketMessage = (data: any) => {
+        setIsAiTyping(false);
+        
+        // Check for audio error
+        if (data.audioError) {
+            setShowAudioErrorPopup(true);
+            setTimeout(() => setShowAudioErrorPopup(false), 5000);
+        }
+        
         switch (data.type) {
             case 'started':
                 addMessage(`Rozmowa rozpoczęta.`, 'system');
@@ -46,9 +65,16 @@ export default function ConversationPage() {
                 addMessage(`${data.content}`, 'transcription');
                 break;
             case 'response':
-                addMessage(data.content, 'ai');
-                if (data.audio) {
+                if (data.audio && isAudioEnabled && !data.audioError) {
+                    setMessages(prev => [...prev, { 
+                        content: data.content, 
+                        type: 'ai', 
+                        audioData: data.audio,
+                        isVoiceMessage: true 
+                    }]);
                     playAudio(data.audio);
+                } else {
+                    addMessage(data.content, 'ai');
                 }
                 break;
             case 'error':
@@ -61,6 +87,7 @@ export default function ConversationPage() {
     };
 
     const playAudio = (base64Audio: string) => {
+        if(!isAudioEnabled) return;
         try {
             if (!audioContextRef.current) {
                 audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
@@ -93,6 +120,7 @@ export default function ConversationPage() {
             addMessage(userInput, 'user');
             ws.current.send(JSON.stringify({ type: 'message', content: userInput }));
             setUserInput('');
+            setIsAiTyping(true);
         }
     };
 
@@ -138,6 +166,7 @@ export default function ConversationPage() {
             mediaRecorderRef.current.stop();
             setIsRecording(false);
             addMessage('Nagrywanie zakończone. Przetwarzanie...', 'system');
+            setIsAiTyping(true);
         }
     };
 
@@ -168,7 +197,7 @@ export default function ConversationPage() {
 
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    }, [messages]);
+    }, [messages, isAiTyping]);
 
     useEffect(() => {
         if (!scenarioId) {
@@ -211,7 +240,8 @@ export default function ConversationPage() {
                     ws.current?.send(JSON.stringify({
                         type: 'start',
                         scenarioId: scenarioId,
-                        roundId: selectedRoundId
+                        roundId: selectedRoundId,
+                        audio: isAudioEnabled
                     }));
                 };
 
@@ -273,27 +303,118 @@ export default function ConversationPage() {
     }
 
     return (
-        <div className="flex flex-col h-[calc(100vh-100px)] max-w-4xl mx-auto bg-white rounded-2xl shadow-lg border">
-            <div className="p-4 border-b">
-                <h1 className="text-xl font-bold">{scenarioData?.title}</h1>
-                <p className="text-sm text-gray-500">{scenarioData?.subtitle}</p>
+        <div className="flex flex-col h-[calc(100vh-100px)] max-w-4xl mx-auto bg-gray-50 rounded-2xl shadow-lg border relative">
+            {/* Audio Error Popup */}
+            {showAudioErrorPopup && (
+                <div className="fixed bottom-4 right-4 z-50 animate-fade-in">
+                    <div className="bg-red-500 text-white px-6 py-4 rounded-lg shadow-xl max-w-sm flex items-start gap-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 shrink-0 mt-0.5">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                        </svg>
+                        <div>
+                            <p className="font-semibold">Błąd audio</p>
+                            <p className="text-sm">Przepraszamy, ale z racji na przeciążenie serwerów, niemożliwe jest wygenerowanie głosu</p>
+                        </div>
+                        <button 
+                            onClick={() => setShowAudioErrorPopup(false)}
+                            className="ml-2 shrink-0 hover:bg-red-600 rounded p-1 transition-colors"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            )}
+            
+            <div className="p-4 border-b flex justify-between items-center bg-white rounded-t-2xl">
+                <div>
+                    <h1 className="text-xl font-bold text-gray-900">{scenarioData?.title}</h1>
+                    <p className="text-sm text-gray-500">{scenarioData?.subtitle}</p>
+                </div>
             </div>
-            <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                {messages.map((msg, index) => (
-                    <div key={index} className={`flex ${msg.type === 'user' || msg.type === 'transcription' ? 'justify-end' : 'justify-start'}`}>
-                         <div className={`max-w-lg p-3 rounded-2xl ${
-                            msg.type === 'user' ? 'bg-blue-600 text-white' :
-                            msg.type === 'ai' ? 'bg-gray-200 text-gray-800' :
-                            msg.type === 'transcription' ? 'bg-blue-100 text-blue-800' :
-                            'bg-yellow-100 text-yellow-800 text-sm italic w-full text-center'
-                        }`}>
-                            {msg.content}
+            <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
+                {messages.map((msg, index) => {
+                    if (msg.type === 'system') {
+                        return (
+                            <div key={index} className="text-center text-xs text-gray-500 py-2 animate-fade-in">
+                                {msg.content}
+                            </div>
+                        );
+                    }
+                    const isUser = msg.type === 'user' || msg.type === 'transcription';
+                    
+                    if (msg.isVoiceMessage) {
+                        return (
+                            <div key={index} className="flex items-end gap-3 justify-start animate-fade-in">
+                                <div className="w-10 h-10 rounded-full bg-linear-to-br from-purple-500 to-blue-500 flex items-center justify-center shrink-0 shadow-md">
+                                    <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                                </div>
+                                <div className="flex flex-col items-start">
+                                    <div className="flex items-center gap-3 bg-white p-2 px-4 rounded-2xl rounded-bl-lg shadow-sm border">
+                                        <button onClick={() => playAudio(msg.audioData!)} className="p-2 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition-transform active:scale-90">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5"><path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" /></svg>
+                                        </button>
+                                        <div className="h-2 w-28 bg-gray-200 rounded-full"></div>
+                                    </div>
+                                    <p className="text-sm text-gray-600 mt-1.5 px-2">{msg.content}</p>
+                                </div>
+                            </div>
+                        );
+                    }
+
+                    return (
+                        <div key={index} className={`flex items-end gap-3 ${isUser ? 'justify-end' : 'justify-start'} animate-fade-in`}>
+                            {!isUser && (
+                                <div className="w-10 h-10 rounded-full bg-linear-to-br from-purple-500 to-blue-500 flex items-center justify-center shrink-0 shadow-md">
+                                    <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                                </div>
+                            )}
+                             <div className={`max-w-lg p-3 px-4 rounded-2xl shadow-md ${
+                                msg.type === 'user' ? 'bg-linear-to-br from-blue-500 to-blue-600 text-white rounded-br-lg' :
+                                msg.type === 'ai' ? 'bg-white text-gray-800 rounded-bl-lg border' :
+                                'bg-blue-50 text-blue-800 rounded-br-lg border border-blue-200'
+                            }`}>
+                                {msg.content}
+                            </div>
+                             {isUser && (
+                                <div className="w-10 h-10 rounded-full bg-linear-to-br from-gray-700 to-gray-900 flex items-center justify-center shrink-0 text-white font-bold shadow-md">
+                                    <span>ME</span>
+                                </div>
+                            )}
+                        </div>
+                    );
+                })}
+                {isAiTyping && (
+                    <div className="flex items-end gap-3 justify-start animate-fade-in">
+                        <div className="w-10 h-10 rounded-full bg-linear-to-br from-purple-500 to-blue-500 flex items-center justify-center shrink-0 shadow-md">
+                            <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                        </div>
+                        <div className="p-3 px-4 rounded-2xl bg-white border shadow-md rounded-bl-lg flex gap-1.5">
+                            <span className="w-2.5 h-2.5 bg-gray-300 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
+                            <span className="w-2.5 h-2.5 bg-gray-300 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
+                            <span className="w-2.5 h-2.5 bg-gray-300 rounded-full animate-bounce"></span>
                         </div>
                     </div>
-                ))}
+                )}
                 <div ref={messagesEndRef} />
             </div>
-            <div className="p-4 border-t flex items-center gap-2 sm:gap-4 bg-gray-50">
+            <div className="p-4 border-t flex items-center gap-2 sm:gap-4 bg-white rounded-b-2xl">
+                <button 
+                    onClick={() => setIsAudioEnabled(prev => !prev)}
+                    className="p-2 rounded-full hover:bg-gray-200 transition-colors"
+                    title={isAudioEnabled ? "Wyłącz głos AI" : "Włącz głos AI"}
+                >
+                    {isAudioEnabled ? (
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-gray-700">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M19.114 5.636a9 9 0 010 12.728M16.463 8.288a5.25 5.25 0 010 7.424M6.75 8.25l4.72-4.72a.75.75 0 011.28.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75z" />
+                        </svg>
+                    ) : (
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-gray-500">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 9.75L19.5 12m0 0l2.25 2.25M19.5 12l2.25-2.25M19.5 12l-2.25 2.25m-10.5-6l4.72-4.72a.75.75 0 011.28.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.01 9.01 0 012.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75z" />
+                        </svg>
+                    )}
+                </button>
                 {isRecording && (
                     <button
                         onClick={toggleMute}

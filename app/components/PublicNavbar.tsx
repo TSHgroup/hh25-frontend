@@ -27,13 +27,13 @@ const PublicNavbar: React.FC = () => {
 
                     <nav className="hidden md:flex items-center justify-center gap-8 pl-4 pr-4">
                         <Link to="/#features" className="text-center text-base font-medium text-gray-700 hover:text-blue-600 transition">
-                            Jak to działa?
+                            Funkcje
                         </Link>
                         <Link to="/#about" className="text-center text-base font-medium text-gray-700 hover:text-blue-600 transition">
-                            Jak zacząć?
+                            Jak zacząć
                         </Link>
                         <Link to="/#detailed-info" className="text-center text-base font-medium text-gray-700 hover:text-blue-600 transition">
-                            Więcej informacji
+                            Metryki
                         </Link>
                     </nav>
 
@@ -79,13 +79,13 @@ const PublicNavbar: React.FC = () => {
                         <div className="px-4 py-4 space-y-4">
                             <nav className="flex flex-col space-y-2">
                                 <Link to="#features" className="px-4 py-2 text-base font-medium text-gray-700 rounded-md hover:bg-gray-50 transition">
-                                    Jak to działa?
+                                    Funkcje
                                 </Link>
                                 <Link to="#about" className="px-4 py-2 text-base font-medium text-gray-700 rounded-md hover:bg-gray-50 transition">
-                                    Jak zacząć?
+                                    Jak zacząć
                                 </Link>
-                                <Link to="#pricing" className="px-4 py-2 text-base font-medium text-gray-700 rounded-md hover:bg-gray-50 transition">
-                                    Więcej informacji
+                                <Link to="#detailed-info" className="px-4 py-2 text-base font-medium text-gray-700 rounded-md hover:bg-gray-50 transition">
+                                    Metryki
                                 </Link>
                             </nav>
                             <div className="pt-4 border-t border-gray-200 space-y-3">

@@ -5,7 +5,7 @@ import PersonaSelectionModal from '../../components/PersonaSelectionModal';
 
 export function meta() {
     return [
-        { title: "Kreator Scenariusza - OdpalGadkę" },
+        { title: "Kreator Scenariusza - OdpalGadke" },
         { name: "description", content: "Create or edit custom conversation scenarios" }
     ];
 }

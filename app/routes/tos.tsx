@@ -2,8 +2,8 @@ import { Link } from "react-router";
 
 export function meta() {
     return [
-        { title: "Regulamin - OdpalGadkę" },
-        { name: "description", content: "Warunki korzystania z platformy OdpalGadkę" }
+        { title: "Regulamin - OdpalGadke" },
+        { name: "description", content: "Warunki korzystania z platformy OdpalGadke" }
     ];
 }
 

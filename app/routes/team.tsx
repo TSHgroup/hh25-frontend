@@ -2,8 +2,8 @@ import { useState } from "react";
 
 export function meta() {
     return [
-        { title: "Nasz Zespół - OdpalGadkę" },
-        { name: "description", content: "Poznaj zespół tworzący OdpalGadkę" }
+        { title: "Nasz Zespół - OdpalGadke" },
+        { name: "description", content: "Poznaj zespół tworzący OdpalGadke" }
     ];
 }
 
@@ -14,35 +14,30 @@ export default function Team() {
         {
             name: "Karol Gajda",
             role: "Mobile Developer",
-            bio: "Fullstack mobile dev",
             image: "KG",
             color: "from-blue-500 to-cyan-600",
         },
         {
             name: "Dawid Wdowin",
             role: "Backend Developer",
-            bio: "Fullstack backend dev",
             image: "DW",
             color: "from-green-500 to-emerald-600",
         },
         {
             name: "Michał Jendrzejczyk",
             role: "Backend Developer",
-            bio: "Fullstack backend dev",
             image: "MJ",
             color: "from-purple-500 to-pink-600",
         },
         {
             name: "Mateusz Makaryk",
             role: "Frontend Developer",
-            bio: "Frontend dev",
             image: "MM",
             color: "from-orange-500 to-red-600",
         },
         {
             name: "Bartosz Kłos",
             role: "Frontend Developer",
-            bio: "Frontend dev",
             image: "BK",
             color: "from-indigo-500 to-purple-600",
         },
@@ -133,9 +128,6 @@ export default function Team() {
                                                             }`}></div>
                                                         </div>
                                                     </div>
-                                                    <p className="text-gray-600 leading-relaxed mb-6 text-sm md:text-base">
-                                                        {member.bio}
-                                                    </p>
                                                     <div className="absolute top-4 right-4 flex gap-1 opacity-20 group-hover:opacity-40 transition-opacity">
                                                         <div className={`w-2 h-2 rounded-full bg-linear-to-r ${member.color}`}></div>
                                                         <div className={`w-2 h-2 rounded-full bg-linear-to-r ${member.color}`}></div>

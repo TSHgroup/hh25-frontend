@@ -3,7 +3,7 @@ import { Link } from "react-router";
 
 export function meta() {
     return [
-        { title: "Wszystkie Scenariusze - OdpalGadkę" },
+        { title: "Wszystkie Scenariusze - OdpalGadke" },
         { name: "description", content: "Przeglądaj wszystkie dostępne scenariusze treningowe" }
     ];
 }
