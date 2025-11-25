@@ -31,6 +31,41 @@ interface AnalyticsData {
     analytics: Analytics;
 }
 
+interface TranscriptEntry {
+    side: 'AI' | 'user';
+    text: string;
+    emotions?: string;
+}
+
+interface Round {
+    roundId: string;
+    transcript: TranscriptEntry[];
+}
+
+interface Stats {
+    emotionScore: number;
+    fluencyScore: number;
+    wordingScore: number;
+}
+
+interface Conversation {
+    _id: string;
+    user: string;
+    scenario: string;
+    scenarioData?: {
+        _id: string;
+        title: string;
+        subtitle?: string;
+        description?: string;
+        category: string;
+    };
+    rounds: Round[];
+    stats?: Stats;
+    length: number;
+    createdAt: string;
+    updatedAt: string;
+}
+
 const StatCardSkeleton = () => (
     <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-lg border border-gray-100 animate-pulse">
         <div className="h-4 bg-gray-200 rounded w-24 mb-3"></div>
@@ -96,6 +131,8 @@ export default function Dashboard() {
     const navigate = useNavigate();
     const [analyticsData, setAnalyticsData] = useState<AnalyticsData | null>(null);
     const [analyticsLoading, setAnalyticsLoading] = useState(true);
+    const [conversations, setConversations] = useState<Conversation[]>([]);
+    const [conversationsLoading, setConversationsLoading] = useState(true);
 
     useEffect(() => {
         const fetchAnalytics = async () => {
@@ -113,6 +150,24 @@ export default function Dashboard() {
             }
         };
         fetchAnalytics();
+    }, []);
+
+    useEffect(() => {
+        const fetchConversations = async () => {
+            setConversationsLoading(true);
+            try {
+                const response = await authenticatedFetch('/api/v1/user/me/conversations?page=1&limit=3');
+                if (response.ok) {
+                    const data = await response.json();
+                    setConversations(data.result);
+                }
+            } catch (err) {
+                console.error('Nie udało się pobrać rozmów:', err);
+            } finally {
+                setConversationsLoading(false);
+            }
+        };
+        fetchConversations();
     }, []);
 
     return (
@@ -174,26 +229,87 @@ export default function Dashboard() {
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
                 <div className="lg:col-span-2 bg-white rounded-2xl p-4 sm:p-6 shadow-lg border border-gray-100">
-                    <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4">Ostatnie Sesje</h2>
-                    <div className="space-y-3 sm:space-y-4">
-                        {[1, 2, 3].map((i) => (
-                            <div key={i} className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition">
-                                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-linear-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow shrink-0">
-                                    <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
-                                    </svg>
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                    <h3 className="text-sm sm:text-base font-semibold text-gray-900 truncate">Rozmowa z X</h3>
-                                    <p className="text-xs sm:text-sm text-gray-600">2 godziny temu</p>
-                                </div>
-                                <div className="text-right shrink-0">
-                                    <div className="text-xl sm:text-2xl font-bold text-green-600">87%</div>
-                                    <p className="text-xs text-gray-500">Pewność</p>
-                                </div>
-                            </div>
-                        ))}
+                    <div className="flex items-center justify-between mb-3 sm:mb-4">
+                        <h2 className="text-lg sm:text-xl font-bold text-gray-900">Ostatnie Sesje</h2>
+                        <Link to="/dashboard/sessions" className="text-blue-600 hover:text-blue-700 text-sm font-semibold">
+                            Zobacz wszystkie →
+                        </Link>
                     </div>
+                    {conversationsLoading ? (
+                        <div className="space-y-3 sm:space-y-4">
+                            {[1, 2, 3].map((i) => (
+                                <div key={i} className="p-3 sm:p-4 bg-gray-100 rounded-xl animate-pulse">
+                                    <div className="flex items-center gap-3 sm:gap-4">
+                                        <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gray-200 rounded-xl shrink-0"></div>
+                                        <div className="flex-1">
+                                            <div className="h-4 bg-gray-200 rounded w-32 mb-2"></div>
+                                            <div className="h-3 bg-gray-200 rounded w-24"></div>
+                                        </div>
+                                        <div className="w-12 h-8 bg-gray-200 rounded"></div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    ) : conversations.length > 0 ? (
+                        <div className="space-y-3 sm:space-y-4">
+                            {conversations.map((conversation) => {
+                                const hasStats = conversation.stats && 
+                                    typeof conversation.stats.emotionScore === 'number' &&
+                                    typeof conversation.stats.fluencyScore === 'number' &&
+                                    typeof conversation.stats.wordingScore === 'number';
+                                
+                                const avgScore = hasStats && conversation.stats
+                                    ? ((conversation.stats.emotionScore + conversation.stats.fluencyScore + conversation.stats.wordingScore) / 3).toFixed(0)
+                                    : 'N/A';
+
+                                const timeAgo = (date: string) => {
+                                    const now = new Date();
+                                    const then = new Date(date);
+                                    const diffMs = now.getTime() - then.getTime();
+                                    const diffMins = Math.floor(diffMs / 60000);
+                                    const diffHours = Math.floor(diffMins / 60);
+                                    const diffDays = Math.floor(diffHours / 24);
+
+                                    if (diffDays > 0) return `${diffDays} ${diffDays === 1 ? 'dzień' : 'dni'} temu`;
+                                    if (diffHours > 0) return `${diffHours} ${diffHours === 1 ? 'godzinę' : 'godzin'} temu`;
+                                    if (diffMins > 0) return `${diffMins} ${diffMins === 1 ? 'minutę' : 'minut'} temu`;
+                                    return 'przed chwilą';
+                                };
+
+                                return (
+                                    <div key={conversation._id} className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition">
+                                        <div className="w-10 h-10 sm:w-12 sm:h-12 bg-linear-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow shrink-0">
+                                            <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
+                                            </svg>
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                            <h3 className="text-sm sm:text-base font-semibold text-gray-900 truncate">
+                                                {conversation.scenarioData?.title || 'Sesja treningowa'}
+                                            </h3>
+                                            <p className="text-xs sm:text-sm text-gray-600">{timeAgo(conversation.createdAt)}</p>
+                                        </div>
+                                        <div className="text-right shrink-0">
+                                            <div className={`text-xl sm:text-2xl font-bold ${hasStats ? 'text-blue-600' : 'text-gray-400'}`}>
+                                                {avgScore}{hasStats ? '' : ''}
+                                            </div>
+                                            <p className="text-xs text-gray-500">{hasStats ? 'Średnia' : 'Brak'}</p>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    ) : (
+                        <div className="text-center py-8">
+                            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                                <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
+                                </svg>
+                            </div>
+                            <p className="text-gray-600 text-sm">Brak sesji treningowych</p>
+                            <p className="text-gray-500 text-xs mt-1">Rozpocznij swoją pierwszą rozmowę</p>
+                        </div>
+                    )}
                 </div>
 
                 <div className="bg-linear-to-br from-blue-500 to-purple-600 rounded-2xl p-4 sm:p-6 shadow-lg text-white">

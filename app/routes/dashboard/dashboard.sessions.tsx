@@ -29,6 +29,13 @@ interface Conversation {
     _id: string;
     user: string;
     scenario: string;
+    scenarioData?: {
+        _id: string;
+        title: string;
+        subtitle?: string;
+        description?: string;
+        category: string;
+    };
     rounds: Round[];
     stats?: Stats;
     length: number;
@@ -113,7 +120,7 @@ const ConversationCard = ({
                 <div className="flex items-start justify-between gap-4 mb-4">
                     <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
-                            <h3 className="text-xl font-bold text-gray-900">Sesja treningowa</h3>
+                            <h3 className="text-xl font-bold text-gray-900">{conversation.scenarioData?.title || 'Sesja treningowa'}</h3>
                             <span className="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded-lg">
                                 {conversation.rounds?.length || 0} {(conversation.rounds?.length || 0) === 1 ? 'runda' : 'rund'}
                             </span>
