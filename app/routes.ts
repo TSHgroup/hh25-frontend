@@ -9,6 +9,7 @@ export default [
         route("tos", "routes/tos.tsx"),
         route("team", "routes/team.tsx"),
         route("scenarios", "routes/scenarios.tsx"),
+        route("mobile", "routes/mobile.tsx")
     ]),
     layout("layouts/dashboardLayout.tsx", [
         route("dashboard", "routes/dashboard/dashboard.tsx"),
