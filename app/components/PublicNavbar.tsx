@@ -12,7 +12,7 @@ const PublicNavbar: React.FC = () => {
     return (
         <header className="sticky top-0 z-50 w-full bg-gray-50 shadow-sm border-b border-gray-200">
             <div className="px-9">
-                <div className="grid grid-cols-2 md:grid-cols-3 items-center h-20 gap-4">
+                <div className="grid grid-cols-2 md:flex justify-between items-center h-20">
                     
                     <div className="flex items-center justify-start pl-4 pr-4">
                         <Link to="/" className="flex items-center gap-3">
@@ -26,13 +26,13 @@ const PublicNavbar: React.FC = () => {
                     </div>
 
                     <nav className="hidden md:flex items-center justify-center gap-8 pl-4 pr-4">
-                        <Link to="/#features" className="text-base font-medium text-gray-700 hover:text-blue-600 transition">
+                        <Link to="/#features" className="text-center text-base font-medium text-gray-700 hover:text-blue-600 transition">
                             Jak to działa?
                         </Link>
-                        <Link to="/#about" className="text-base font-medium text-gray-700 hover:text-blue-600 transition">
+                        <Link to="/#about" className="text-center text-base font-medium text-gray-700 hover:text-blue-600 transition">
                             Jak zacząć?
                         </Link>
-                        <Link to="/#detailed-info" className="text-base font-medium text-gray-700 hover:text-blue-600 transition">
+                        <Link to="/#detailed-info" className="text-center text-base font-medium text-gray-700 hover:text-blue-600 transition">
                             Więcej informacji
                         </Link>
                     </nav>
@@ -47,7 +47,7 @@ const PublicNavbar: React.FC = () => {
                             </Link>
                             ) : (
                             <>
-                            <Link to="/login" className="text-base font-medium text-gray-700 px-4 py-2 hover:text-blue-600 transition">
+                            <Link to="/login" className="text-base text-center font-medium text-gray-700 px-4 py-2 hover:text-blue-600 transition">
                                 Zaloguj się
                             </Link>
                             <Link to="/signup">
