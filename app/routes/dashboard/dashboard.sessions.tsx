@@ -3,7 +3,7 @@ import { authenticatedFetch } from '../../utils/api';
 
 export function meta() {
     return [
-        { title: "Historia Sesji - OdpalGadkę" },
+        { title: "Historia Sesji - OdpalGadke" },
         { name: "description", content: "View your training session history" }
     ];
 }

@@ -4,7 +4,7 @@ import { authenticatedFetch } from '../../utils/api';
 
 export function meta() {
     return [
-        { title: "Persony - OdpalGadkę" },
+        { title: "Persony - OdpalGadke" },
         { name: "description", content: "Browse and manage your personas" }
     ];
 }

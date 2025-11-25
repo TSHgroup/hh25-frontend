@@ -5,7 +5,7 @@ import PublicFooter from "../components/PublicFooter";
 
 export function meta({}: Route.MetaArgs) {
     return [
-        { title: "404 - Strona nie znaleziona | OdpalGadkę" },
+        { title: "404 - Strona nie znaleziona | OdpalGadke" },
         { name: "description", content: "Przepraszamy, strona której szukasz nie istnieje." }
     ];
 }

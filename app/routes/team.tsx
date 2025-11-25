@@ -2,8 +2,8 @@ import { useState } from "react";
 
 export function meta() {
     return [
-        { title: "Nasz Zespół - OdpalGadkę" },
-        { name: "description", content: "Poznaj zespół tworzący OdpalGadkę" }
+        { title: "Nasz Zespół - OdpalGadke" },
+        { name: "description", content: "Poznaj zespół tworzący OdpalGadke" }
     ];
 }
 
