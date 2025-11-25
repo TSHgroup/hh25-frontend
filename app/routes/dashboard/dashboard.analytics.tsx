@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { authenticatedFetch } from '../../utils/api';
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
-import { Line } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend, RadialLinearScale, Filler } from 'chart.js';
+import { Line, Radar, Bar, Chart } from 'react-chartjs-2';
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, RadialLinearScale, Title, Tooltip, Legend, Filler);
 
 export function meta() {
     return [
@@ -57,7 +57,7 @@ const SkeletonStreakCard = () => (
 );
 
 const SkeletonChart = () => (
-    <div className="relative w-full min-h-[300px] max-h-[60vh] sm:aspect-2/1 bg-white p-4 sm:p-6 rounded-2xl shadow-lg border border-gray-100">
+    <div className="relative w-full min-h-[300px] bg-white p-4 sm:p-6 rounded-2xl shadow-lg border border-gray-100">
         <div className="animate-pulse h-full flex flex-col">
             <div className="h-6 bg-gray-200 rounded w-52 mb-8 mx-auto"></div>
             <div className="flex-1 flex items-end justify-around gap-8 pb-4">
@@ -69,6 +69,21 @@ const SkeletonChart = () => (
                 <div className="h-3 bg-gray-200 rounded w-20"></div>
                 <div className="h-3 bg-gray-200 rounded w-20"></div>
                 <div className="h-3 bg-gray-200 rounded w-20"></div>
+            </div>
+        </div>
+    </div>
+);
+
+const SkeletonRadarChart = () => (
+    <div className="relative w-full min-h-[300px] bg-white p-4 sm:p-6 rounded-2xl shadow-lg border border-gray-100">
+        <div className="animate-pulse h-full flex flex-col">
+            <div className="h-6 bg-gray-200 rounded w-52 mb-8 mx-auto"></div>
+            <div className="flex-1 flex items-center justify-center">
+                <div className="relative w-48 h-48">
+                    <div className="absolute inset-0 border-4 border-gray-200 rounded-full"></div>
+                    <div className="absolute inset-8 border-4 border-gray-200 rounded-full"></div>
+                    <div className="absolute inset-16 border-4 border-gray-200 rounded-full"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -127,33 +142,113 @@ export default function AnalyticsPage() {
         fetchAnalytics();
     }, [span]);
 
-    const chartData = {
+    const radarData = {
         labels: ['Płynność', 'Słownictwo', 'Emocje'],
         datasets: [
             {
-                label: 'Średnie wyniki',
+                label: 'Średni wynik',
+                data: [56, 62, 59],
+                borderColor: 'rgba(34, 197, 94, 0.8)',
+                backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                borderWidth: 2,
+                borderDash: [5, 5],
+                pointRadius: 0,
+            },
+            {
+                label: 'Obecne wyniki',
                 data: [
                     analyticsData?.analytics.averageFluency ?? 0,
                     analyticsData?.analytics.averageWording ?? 0,
                     analyticsData?.analytics.averageEmotion ?? 0,
                 ],
                 borderColor: 'rgb(59, 130, 246)',
-                backgroundColor: 'rgba(59, 130, 246, 0.5)',
-                tension: 0.1
+                backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                borderWidth: 2,
+                pointBackgroundColor: 'rgb(59, 130, 246)',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: 'rgb(59, 130, 246)',
             },
         ],
     };
     
-    const chartOptions = {
+    const radarOptions = {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
             legend: {
-                display: false,
+                display: true,
+                position: 'top' as const,
             },
             title: {
                 display: true,
-                text: 'Średnie wyniki w kategoriach',
+                text: 'Twoje wyniki vs Średnia',
+                font: {
+                    size: 16,
+                }
+            },
+        },
+        scales: {
+            r: {
+                beginAtZero: true,
+                max: 100,
+                ticks: {
+                    stepSize: 20,
+                },
+            },
+        },
+    };
+
+    const mixedChartData = {
+        labels: ['Emocje', 'Płynność', 'Słownictwo'],
+        datasets: [
+            {
+                type: 'bar' as const,
+                label: 'Obecne wartości',
+                data: [
+                    analyticsData?.analytics.averageEmotion ?? 0,
+                    analyticsData?.analytics.averageFluency ?? 0,
+                    analyticsData?.analytics.averageWording ?? 0,
+                ],
+                backgroundColor: 'rgba(59, 130, 246, 0.7)',
+                borderColor: 'rgb(59, 130, 246)',
+                borderWidth: 1,
+                yAxisID: 'y',
+            },
+            {
+                type: 'line' as const,
+                label: 'Trend (%)',
+                data: [
+                    analyticsData?.trends.fluencyScore ?? 0,
+                    analyticsData?.trends.wordingScore ?? 0,
+                    analyticsData?.trends.emotionScore ?? 0,
+                ],
+                borderColor: 'rgb(34, 197, 94)',
+                backgroundColor: 'rgba(34, 197, 94, 0.5)',
+                borderWidth: 2,
+                tension: 0.4,
+                yAxisID: 'y1',
+                pointRadius: 5,
+                pointHoverRadius: 7,
+            },
+        ],
+    };
+    
+    const mixedChartOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: {
+            mode: 'index' as const,
+            intersect: false,
+        },
+        plugins: {
+            legend: {
+                display: true,
+                position: 'top' as const,
+            },
+            title: {
+                display: true,
+                text: 'Wyniki i trendy',
                 font: {
                     size: 16,
                 }
@@ -161,8 +256,29 @@ export default function AnalyticsPage() {
         },
         scales: {
             y: {
+                type: 'linear' as const,
+                display: true,
+                position: 'left' as const,
                 beginAtZero: true,
                 max: 100,
+                title: {
+                    display: true,
+                    text: 'Wynik',
+                },
+            },
+            y1: {
+                type: 'linear' as const,
+                display: true,
+                position: 'right' as const,
+                min: 0,
+                max: 100,
+                title: {
+                    display: true,
+                    text: 'Trend (%)',
+                },
+                grid: {
+                    drawOnChartArea: false,
+                },
             },
         },
     };
@@ -192,7 +308,10 @@ export default function AnalyticsPage() {
                     <SkeletonStreakCard />
                 </div>
 
-                <SkeletonChart />
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+                    <SkeletonRadarChart />
+                    <SkeletonChart />
+                </div>
             </div>
         );
     }
@@ -268,15 +387,21 @@ export default function AnalyticsPage() {
                     value={(analyticsData.analytics.totalLength / 60).toFixed(1)} 
                     trend={analyticsData.trends.totalLength}
                     unit=" min" />
-                 <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 text-center md:col-span-2 lg:col-span-1">
+                <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 text-center md:col-span-2 lg:col-span-1">
                     <p className="text-sm font-semibold text-gray-600">Passa treningowa</p>
                     <p className="text-4xl font-bold text-blue-600 my-2">{analyticsData.currentStreak}</p>
                     <p className="text-gray-500 text-sm">dni z rzędu</p>
                 </div>
             </div>
 
-            <div className="relative w-full min-h-[300px] max-h-[60vh] sm:aspect-2/1 bg-white p-4 sm:p-6 rounded-2xl shadow-lg border border-gray-100">
-                <Line options={chartOptions} data={chartData} />
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+                <div className="relative w-full min-h-[350px] sm:min-h-[400px] bg-white p-4 sm:p-6 rounded-2xl shadow-lg border border-gray-100">
+                    <Radar options={radarOptions} data={radarData} />
+                </div>
+
+                <div className="relative w-full min-h-[300px] bg-white p-4 sm:p-6 rounded-2xl shadow-lg border border-gray-100">
+                    <Chart type="bar" options={mixedChartOptions} data={mixedChartData} />
+                </div>
             </div>
         </div>
     );
