@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { authenticatedFetch } from '../../utils/api';
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend, RadialLinearScale, Filler } from 'chart.js';
-import { Line, Radar, Bar, Chart } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend, RadialLinearScale, Filler, BarController } from 'chart.js';
+import { Radar, Chart } from 'react-chartjs-2';
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, RadialLinearScale, Title, Tooltip, Legend, Filler);
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, BarController, RadialLinearScale, Title, Tooltip, Legend, Filler);
 
 export function meta() {
     return [
