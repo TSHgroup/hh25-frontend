@@ -10,6 +10,7 @@ interface Message {
 interface ScenarioData {
     title: string;
     subtitle: string;
+    openingPrompt: string;
     rounds: { _id: string, prompt: string }[];
 }
 
@@ -39,6 +40,7 @@ export default function ConversationPage() {
         switch (data.type) {
             case 'started':
                 addMessage(`Rozmowa rozpoczęta.`, 'system');
+                addMessage(`${scenarioData?.openingPrompt}`, 'ai');
                 break;
             case 'transcription':
                 addMessage(`${data.content}`, 'transcription');
