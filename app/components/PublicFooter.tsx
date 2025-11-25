@@ -41,6 +41,11 @@ const PublicFooter: React.FC = () => {
                                     Dashboard
                                 </Link>
                             </li>
+                            <li>
+                                <Link to="/mobile" className="text-gray-400 hover:text-white transition-colors duration-300 text-sm md:text-base flex items-center gap-2">
+                                    Aplikacja mobilna
+                                </Link>
+                            </li>
                         </ul>
                     </div>
 
