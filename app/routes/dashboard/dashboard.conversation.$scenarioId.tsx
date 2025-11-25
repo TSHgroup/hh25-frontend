@@ -38,6 +38,7 @@ export default function ConversationPage() {
     const [isMuted, setIsMuted] = useState(false);
     const [isAudioEnabled, setIsAudioEnabled] = useState(true);
     const [isAiTyping, setIsAiTyping]= useState(false);
+    const [showAudioErrorPopup, setShowAudioErrorPopup] = useState(false);
     const mediaRecorderRef = useRef<MediaRecorder | null>(null);
     const audioStreamRef = useRef<MediaStream | null>(null);
     const audioChunksRef = useRef<Blob[]>([]);
@@ -48,6 +49,13 @@ export default function ConversationPage() {
 
     const handleSocketMessage = (data: any) => {
         setIsAiTyping(false);
+        
+        // Check for audio error
+        if (data.audioError) {
+            setShowAudioErrorPopup(true);
+            setTimeout(() => setShowAudioErrorPopup(false), 5000);
+        }
+        
         switch (data.type) {
             case 'started':
                 addMessage(`Rozmowa rozpoczęta.`, 'system');
@@ -57,7 +65,7 @@ export default function ConversationPage() {
                 addMessage(`${data.content}`, 'transcription');
                 break;
             case 'response':
-                if (data.audio && isAudioEnabled) {
+                if (data.audio && isAudioEnabled && !data.audioError) {
                     setMessages(prev => [...prev, { 
                         content: data.content, 
                         type: 'ai', 
@@ -295,7 +303,30 @@ export default function ConversationPage() {
     }
 
     return (
-        <div className="flex flex-col h-[calc(100vh-100px)] max-w-4xl mx-auto bg-gray-50 rounded-2xl shadow-lg border">
+        <div className="flex flex-col h-[calc(100vh-100px)] max-w-4xl mx-auto bg-gray-50 rounded-2xl shadow-lg border relative">
+            {/* Audio Error Popup */}
+            {showAudioErrorPopup && (
+                <div className="fixed bottom-4 right-4 z-50 animate-fade-in">
+                    <div className="bg-red-500 text-white px-6 py-4 rounded-lg shadow-xl max-w-sm flex items-start gap-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 shrink-0 mt-0.5">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                        </svg>
+                        <div>
+                            <p className="font-semibold">Błąd audio</p>
+                            <p className="text-sm">Przepraszamy, ale z racji na przeciążenie serwerów, niemożliwe jest wygenerowanie głosu</p>
+                        </div>
+                        <button 
+                            onClick={() => setShowAudioErrorPopup(false)}
+                            className="ml-2 shrink-0 hover:bg-red-600 rounded p-1 transition-colors"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            )}
+            
             <div className="p-4 border-b flex justify-between items-center bg-white rounded-t-2xl">
                 <div>
                     <h1 className="text-xl font-bold text-gray-900">{scenarioData?.title}</h1>
