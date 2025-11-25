@@ -1,5 +1,6 @@
-import { Link } from "react-router";
-import StatsCard from "../../components/dashboard/StatsCard";
+import { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router';
+import { authenticatedFetch } from '../../utils/api';
 
 export function meta() {
     return [
@@ -8,7 +9,108 @@ export function meta() {
     ];
 }
 
+interface Trends {
+    conversations: number;
+    totalLength: number;
+    emotionScore: number;
+    fluencyScore: number;
+    wordingScore: number;
+}
+
+interface Analytics {
+    conversations: number;
+    totalLength: number;
+    averageEmotion: number;
+    averageFluency: number;
+    averageWording: number;
+}
+
+interface AnalyticsData {
+    trends: Trends;
+    currentStreak: number;
+    analytics: Analytics;
+}
+
+// Komponent StatCard dla analityki
+const StatCard = ({ title, value, trend, unit = '' }: { title: string, value: string | number, trend: number | null, unit?: string }) => {
+    const hasValidTrend = typeof trend === 'number' && isFinite(trend);
+    const isPositive = hasValidTrend && trend >= 0;
+    const trendText = hasValidTrend ? `${isPositive ? '+' : ''}${trend.toFixed(1)}%` : 'Brak danych';
+
+    return (
+        <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-lg border border-gray-100">
+            <p className="text-sm font-semibold text-gray-600">{title}</p>
+            <p className="text-2xl sm:text-3xl font-bold text-gray-900 my-2">{value}{unit}</p>
+            <div className="flex items-center text-sm">
+                {hasValidTrend ? (
+                    <>
+                        <span className={`font-semibold ${isPositive ? 'text-green-600' : 'text-red-600'}`}>
+                            {trendText}
+                        </span>
+                        <span className="text-gray-500 ml-1">vs poprzedni okres</span>
+                    </>
+                ) : (
+                    <span className="text-gray-500">{trendText}</span>
+                )}
+            </div>
+        </div>
+    );
+};
+
+// Komponent StatsCard dla statystyk dashboardu
+const StatsCard = ({ title, value, icon, trend, color }: { title: string, value: string, icon: string, trend: { value: number, isPositive: boolean }, color: string }) => {
+    const colorClasses = {
+        blue: 'bg-blue-500',
+        green: 'bg-green-500',
+        purple: 'bg-purple-500',
+        orange: 'bg-orange-500',
+    };
+
+    const bgColor = colorClasses[color as keyof typeof colorClasses] || 'bg-gray-500';
+
+    return (
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-4 sm:p-6">
+            <div className="flex items-center justify-between mb-4">
+                <div className={`w-10 h-10 sm:w-12 sm:h-12 ${bgColor} rounded-xl flex items-center justify-center`}>
+                    <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={icon} />
+                    </svg>
+                </div>
+                <div className={`text-sm font-semibold ${trend.isPositive ? 'text-green-600' : 'text-red-600'}`}>
+                    {trend.isPositive ? '+' : ''}{trend.value}%
+                </div>
+            </div>
+            <h3 className="text-sm font-semibold text-gray-600 mb-1">{title}</h3>
+            <p className="text-2xl sm:text-3xl font-bold text-gray-900">{value}</p>
+        </div>
+    );
+};
+
 export default function Dashboard() {
+    const navigate = useNavigate();
+    // Dodane stany dla analityki
+    const [analyticsData, setAnalyticsData] = useState<AnalyticsData | null>(null);
+    const [analyticsLoading, setAnalyticsLoading] = useState(true);
+
+    // Dodany useEffect do pobrania analityki
+    useEffect(() => {
+        const fetchAnalytics = async () => {
+            setAnalyticsLoading(true);
+            try {
+                const response = await authenticatedFetch('/api/v1/analytics?span=7d');
+                if (response.ok) {
+                    const data: AnalyticsData = await response.json();
+                    setAnalyticsData(data);
+                }
+            } catch (err) {
+                console.error('Nie udało się pobrać analityki:', err);
+            } finally {
+                setAnalyticsLoading(false);
+            }
+        };
+        fetchAnalytics();
+    }, []);
+
     return (
         <div className="space-y-4 sm:space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -26,34 +128,44 @@ export default function Dashboard() {
                 </Link>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6">
-                <StatsCard
-                    title="Ukończone Sesje"
-                    value="24"
-                    icon="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                    trend={{ value: 12, isPositive: true }}
-                    color="blue"
-                />
-                <StatsCard
-                    title="Średnia Pewność"
-                    value="87%"
-                    icon="M13 10V3L4 14h7v7l9-11h-7z"
-                    trend={{ value: 5, isPositive: true }}
-                    color="green"
-                />
-                <StatsCard
-                    title="Czas Treningów"
-                    value="12.5h"
-                    icon="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                    trend={{ value: 8, isPositive: true }}
-                    color="purple"
-                />
-                <StatsCard
-                    title="Streak"
-                    value="7 dni"
-                    icon="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"
-                    color="orange"
-                />
+            {/* Dodana sekcja analityki */}
+            <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
+                <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-xl font-bold text-gray-900">Twoje statystyki</h2>
+                    <Link 
+                        to="/dashboard/analytics" 
+                        className="text-blue-600 hover:text-blue-700 text-sm font-semibold"
+                    >
+                        Zobacz szczegóły →
+                    </Link>
+                </div>
+                {analyticsLoading ? (
+                    <div className="text-center py-8">
+                        <div className="animate-spin rounded-full h-8 w-8 border-b-4 border-blue-600 mx-auto mb-2"></div>
+                        <p className="text-gray-600 text-sm">Ładowanie statystyk...</p>
+                    </div>
+                ) : analyticsData ? (
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <StatCard 
+                            title="Liczba rozmów" 
+                            value={analyticsData.analytics.conversations} 
+                            trend={analyticsData.trends.conversations} 
+                        />
+                        <StatCard 
+                            title="Łączny czas rozmów" 
+                            value={(analyticsData.analytics.totalLength / 60).toFixed(1)} 
+                            trend={analyticsData.trends.totalLength}
+                            unit=" min"
+                        />
+                        <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-lg border border-gray-100 text-center">
+                            <p className="text-sm font-semibold text-gray-600">Passa treningowa</p>
+                            <p className="text-3xl font-bold text-blue-600 my-2">{analyticsData.currentStreak}</p>
+                            <p className="text-gray-500 text-sm">dni z rzędu</p>
+                        </div>
+                    </div>
+                ) : (
+                    <p className="text-gray-600 text-center py-4">Brak danych do wyświetlenia.</p>
+                )}
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
