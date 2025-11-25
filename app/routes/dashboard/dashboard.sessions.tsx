@@ -47,6 +47,171 @@ interface ApiResponse {
 
 type TabType = 'all' | 'recent' | 'best';
 
+const SessionCardSkeleton = () => (
+    <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden animate-pulse">
+        <div className="p-6">
+            <div className="flex items-start justify-between gap-4 mb-4">
+                <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-2">
+                        <div className="h-6 bg-gray-200 rounded w-40"></div>
+                        <div className="h-6 bg-gray-200 rounded w-16"></div>
+                    </div>
+                    <div className="h-4 bg-gray-200 rounded w-48"></div>
+                </div>
+                <div className="text-right">
+                    <div className="h-8 bg-gray-200 rounded w-12 mb-1"></div>
+                    <div className="h-3 bg-gray-200 rounded w-16"></div>
+                </div>
+            </div>
+
+            <div className="grid grid-cols-3 gap-4 mb-4">
+                <div className="text-center p-3 bg-gray-100 rounded-xl">
+                    <div className="h-6 bg-gray-200 rounded w-8 mx-auto mb-1"></div>
+                    <div className="h-3 bg-gray-200 rounded w-12 mx-auto"></div>
+                </div>
+                <div className="text-center p-3 bg-gray-100 rounded-xl">
+                    <div className="h-6 bg-gray-200 rounded w-8 mx-auto mb-1"></div>
+                    <div className="h-3 bg-gray-200 rounded w-12 mx-auto"></div>
+                </div>
+                <div className="text-center p-3 bg-gray-100 rounded-xl">
+                    <div className="h-6 bg-gray-200 rounded w-8 mx-auto mb-1"></div>
+                    <div className="h-3 bg-gray-200 rounded w-12 mx-auto"></div>
+                </div>
+            </div>
+
+            <div className="flex items-center justify-between mb-4">
+                <div className="h-4 bg-gray-200 rounded w-20"></div>
+                <div className="h-3 bg-gray-200 rounded w-24"></div>
+            </div>
+
+            <div className="h-10 bg-gray-200 rounded-xl"></div>
+        </div>
+    </div>
+);
+
+const ConversationCard = ({ 
+    conversation, 
+    isExpanded, 
+    onToggleExpand 
+}: { 
+    conversation: Conversation;
+    isExpanded: boolean;
+    onToggleExpand: () => void;
+}) => {
+    const hasStats = conversation.stats && 
+        typeof conversation.stats.emotionScore === 'number' &&
+        typeof conversation.stats.fluencyScore === 'number' &&
+        typeof conversation.stats.wordingScore === 'number';
+    
+    const avgScore = hasStats && conversation.stats
+        ? ((conversation.stats.emotionScore + conversation.stats.fluencyScore + conversation.stats.wordingScore) / 3).toFixed(1)
+        : 'N/A';
+
+    return (
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
+            <div className="p-6">
+                <div className="flex items-start justify-between gap-4 mb-4">
+                    <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-2">
+                            <h3 className="text-xl font-bold text-gray-900">Sesja treningowa</h3>
+                            <span className="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded-lg">
+                                {conversation.rounds?.length || 0} {(conversation.rounds?.length || 0) === 1 ? 'runda' : 'rund'}
+                            </span>
+                        </div>
+                        <p className="text-sm text-gray-600">
+                            {new Date(conversation.createdAt).toLocaleDateString('pl-PL', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit'
+                            })}
+                        </p>
+                    </div>
+                    <div className="text-right">
+                        <p className="text-3xl font-bold text-blue-600">{avgScore}</p>
+                        <p className="text-xs text-gray-500">Średnia</p>
+                    </div>
+                </div>
+
+                {hasStats ? (
+                    <div className="grid grid-cols-3 gap-4 mb-4">
+                        <div className="text-center p-3 bg-purple-50 rounded-xl">
+                            <p className="text-2xl font-bold text-purple-600">{conversation?.stats?.emotionScore}</p>
+                            <p className="text-xs text-gray-600 mt-1">Emocje</p>
+                        </div>
+                        <div className="text-center p-3 bg-green-50 rounded-xl">
+                            <p className="text-2xl font-bold text-green-600">{conversation?.stats?.fluencyScore}</p>
+                            <p className="text-xs text-gray-600 mt-1">Płynność</p>
+                        </div>
+                        <div className="text-center p-3 bg-orange-50 rounded-xl">
+                            <p className="text-2xl font-bold text-orange-600">{conversation?.stats?.wordingScore}</p>
+                            <p className="text-xs text-gray-600 mt-1">Słownictwo</p>
+                        </div>
+                    </div>
+                ) : (
+                    <div className="p-4 bg-gray-100 rounded-xl mb-4 text-center">
+                        <p className="text-sm text-gray-600">Brak dostępnych statystyk</p>
+                    </div>
+                )}
+
+                <div className="flex items-center justify-between text-sm text-gray-600 mb-4">
+                    <div className="flex items-center gap-2">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span>{((conversation.length || 0) / 60).toFixed(1)} min</span>
+                    </div>
+                    <span className="text-xs text-gray-400">ID: {conversation.scenario?.slice(0, 8) || 'N/A'}...</span>
+                </div>
+
+                <button
+                    onClick={onToggleExpand}
+                    className="w-full px-4 py-2 bg-gray-100 text-gray-700 font-semibold rounded-xl hover:bg-gray-200 transition flex items-center justify-center gap-2">
+                    <span>{isExpanded ? 'Zwiń szczegóły' : 'Zobacz transkrypcję'}</span>
+                    <svg
+                        className={`w-4 h-4 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                </button>
+            </div>
+
+            {isExpanded && (
+                <div className="border-t border-gray-200 p-6 bg-gray-50">
+                    <h4 className="text-lg font-bold text-gray-900 mb-4">Transkrypcja rozmowy</h4>
+                    <div className="space-y-4">
+                        {conversation.rounds.map((round, idx) => (
+                            <div key={round.roundId || idx} className="space-y-2">
+                                <p className="text-sm font-semibold text-gray-500 uppercase">Runda {idx + 1}</p>
+                                {round.transcript.map((entry, entryIdx) => (
+                                    <div
+                                        key={entryIdx}
+                                        className={`p-3 rounded-xl ${
+                                            entry.side === 'AI'
+                                                ? 'bg-blue-100 text-blue-900'
+                                                : 'bg-green-100 text-green-900'
+                                        }`}>
+                                        <p className="text-xs font-bold mb-1">
+                                            {entry.side === 'AI' ? '🤖 AI' : '👤 Ty'}
+                                        </p>
+                                        <p className="text-sm">{entry.text}</p>
+                                        {entry.emotions && (
+                                            <p className="text-xs text-gray-600 mt-1">Emocje: {entry.emotions}</p>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+};
+
 export default function Sessions() {
     const [activeTab, setActiveTab] = useState<TabType>('all');
     const [conversations, setConversations] = useState<Conversation[]>([]);
@@ -123,13 +288,6 @@ export default function Sessions() {
         setExpandedId(expandedId === id ? null : id);
     };
 
-    const renderLoadingState = () => (
-        <div className="text-center py-12">
-            <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mx-auto mb-4"></div>
-            <p className="text-gray-600 text-lg">Ładowanie sesji...</p>
-        </div>
-    );
-
     const renderErrorState = () => (
         <div className="bg-red-50 border-l-4 border-red-600 p-6 rounded-2xl shadow-lg">
             <div className="flex items-start gap-4">
@@ -160,122 +318,6 @@ export default function Sessions() {
             <p className="text-gray-600 mb-6">Rozpocznij swoją pierwszą rozmowę, aby zobaczyć historię tutaj</p>
         </div>
     );
-
-    const renderConversationCard = (conversation: Conversation) => {
-        const isExpanded = expandedId === conversation._id;
-        const hasStats = conversation.stats && 
-            typeof conversation.stats.emotionScore === 'number' &&
-            typeof conversation.stats.fluencyScore === 'number' &&
-            typeof conversation.stats.wordingScore === 'number';
-        
-        const avgScore = hasStats && conversation.stats
-            ? ((conversation.stats.emotionScore + conversation.stats.fluencyScore + conversation.stats.wordingScore) / 3).toFixed(1)
-            : 'N/A';
-
-        return (
-            <div key={conversation._id} className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-                <div className="p-6">
-                    <div className="flex items-start justify-between gap-4 mb-4">
-                        <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-2">
-                                <h3 className="text-xl font-bold text-gray-900">Sesja treningowa</h3>
-                                <span className="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded-lg">
-                                    {conversation.rounds?.length || 0} {(conversation.rounds?.length || 0) === 1 ? 'runda' : 'rund'}
-                                </span>
-                            </div>
-                            <p className="text-sm text-gray-600">
-                                {new Date(conversation.createdAt).toLocaleDateString('pl-PL', {
-                                    year: 'numeric',
-                                    month: 'long',
-                                    day: 'numeric',
-                                    hour: '2-digit',
-                                    minute: '2-digit'
-                                })}
-                            </p>
-                        </div>
-                        <div className="text-right">
-                            <p className="text-3xl font-bold text-blue-600">{avgScore}</p>
-                            <p className="text-xs text-gray-500">Średnia</p>
-                        </div>
-                    </div>
-
-                    {hasStats ? (
-                        <div className="grid grid-cols-3 gap-4 mb-4">
-                            <div className="text-center p-3 bg-purple-50 rounded-xl">
-                                <p className="text-2xl font-bold text-purple-600">{conversation?.stats?.emotionScore}</p>
-                                <p className="text-xs text-gray-600 mt-1">Emocje</p>
-                            </div>
-                            <div className="text-center p-3 bg-green-50 rounded-xl">
-                                <p className="text-2xl font-bold text-green-600">{conversation?.stats?.fluencyScore}</p>
-                                <p className="text-xs text-gray-600 mt-1">Płynność</p>
-                            </div>
-                            <div className="text-center p-3 bg-orange-50 rounded-xl">
-                                <p className="text-2xl font-bold text-orange-600">{conversation?.stats?.wordingScore}</p>
-                                <p className="text-xs text-gray-600 mt-1">Słownictwo</p>
-                            </div>
-                        </div>
-                    ) : (
-                        <div className="p-4 bg-gray-100 rounded-xl mb-4 text-center">
-                            <p className="text-sm text-gray-600">Brak dostępnych statystyk</p>
-                        </div>
-                    )}
-
-                    <div className="flex items-center justify-between text-sm text-gray-600 mb-4">
-                        <div className="flex items-center gap-2">
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                            <span>{((conversation.length || 0) / 60).toFixed(1)} min</span>
-                        </div>
-                        <span className="text-xs text-gray-400">ID: {conversation.scenario?.slice(0, 8) || 'N/A'}...</span>
-                    </div>
-
-                    <button
-                        onClick={() => toggleExpand(conversation._id)}
-                        className="w-full px-4 py-2 bg-gray-100 text-gray-700 font-semibold rounded-xl hover:bg-gray-200 transition flex items-center justify-center gap-2">
-                        <span>{isExpanded ? 'Zwiń szczegóły' : 'Zobacz transkrypcję'}</span>
-                        <svg
-                            className={`w-4 h-4 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                        </svg>
-                    </button>
-                </div>
-
-                {isExpanded && (
-                    <div className="border-t border-gray-200 p-6 bg-gray-50">
-                        <h4 className="text-lg font-bold text-gray-900 mb-4">Transkrypcja rozmowy</h4>
-                        <div className="space-y-4">
-                            {conversation.rounds.map((round, idx) => (
-                                <div key={round.roundId || idx} className="space-y-2">
-                                    <p className="text-sm font-semibold text-gray-500 uppercase">Runda {idx + 1}</p>
-                                    {round.transcript.map((entry, entryIdx) => (
-                                        <div
-                                            key={entryIdx}
-                                            className={`p-3 rounded-xl ${
-                                                entry.side === 'AI'
-                                                    ? 'bg-blue-100 text-blue-900'
-                                                    : 'bg-green-100 text-green-900'
-                                            }`}>
-                                            <p className="text-xs font-bold mb-1">
-                                                {entry.side === 'AI' ? '🤖 AI' : '👤 Ty'}
-                                            </p>
-                                            <p className="text-sm">{entry.text}</p>
-                                            {entry.emotions && (
-                                                <p className="text-xs text-gray-600 mt-1">Emocje: {entry.emotions}</p>
-                                            )}
-                                        </div>
-                                    ))}
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                )}
-            </div>
-        );
-    };
 
     const filteredConversations = getFilteredConversations();
 
@@ -326,7 +368,13 @@ export default function Sessions() {
             </div>
 
             <div>
-                {loading && renderLoadingState()}
+                {loading && (
+                    <div className="space-y-4">
+                        {[...Array(limit)].map((_, i) => (
+                            <SessionCardSkeleton key={i} />
+                        ))}
+                    </div>
+                )}
                 {error && !loading && renderErrorState()}
                 {!loading && !error && (
                     <>
@@ -335,7 +383,14 @@ export default function Sessions() {
                         ) : (
                             <>
                                 <div className="space-y-4">
-                                    {filteredConversations.map(renderConversationCard)}
+                                    {filteredConversations.map((conversation) => (
+                                        <ConversationCard
+                                            key={conversation._id}
+                                            conversation={conversation}
+                                            isExpanded={expandedId === conversation._id}
+                                            onToggleExpand={() => toggleExpand(conversation._id)}
+                                        />
+                                    ))}
                                 </div>
 
                                 {lastPage > 1 && (

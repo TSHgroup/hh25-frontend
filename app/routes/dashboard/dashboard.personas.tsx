@@ -44,6 +44,46 @@ interface ApiResponse {
 
 type TabType = 'all' | 'my' | 'create';
 
+const PersonaCardSkeleton = () => (
+    <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden flex flex-col animate-pulse">
+        <div className="p-4 sm:p-6 flex-1 flex flex-col">
+            <div className="flex items-start justify-between gap-2 mb-3">
+                <div className="h-6 bg-gray-200 rounded w-3/4"></div>
+                <div className="h-6 bg-gray-200 rounded w-20 shrink-0"></div>
+            </div>
+
+            <div className="h-4 bg-gray-200 rounded w-1/2 mb-3"></div>
+            <div className="h-4 bg-gray-200 rounded w-full mb-2"></div>
+            <div className="h-4 bg-gray-200 rounded w-5/6 mb-4"></div>
+
+            <div className="space-y-2 mb-4">
+                <div className="flex items-center gap-2">
+                    <div className="h-4 w-4 bg-gray-200 rounded"></div>
+                    <div className="h-3 bg-gray-200 rounded w-32"></div>
+                </div>
+                <div className="flex items-center gap-2">
+                    <div className="h-4 w-4 bg-gray-200 rounded"></div>
+                    <div className="h-3 bg-gray-200 rounded w-40"></div>
+                </div>
+                <div className="flex items-center gap-2">
+                    <div className="h-4 w-4 bg-gray-200 rounded"></div>
+                    <div className="h-3 bg-gray-200 rounded w-48"></div>
+                </div>
+            </div>
+
+            <div className="border-t border-gray-200 pt-3 mb-4">
+                <div className="h-3 bg-gray-200 rounded w-40"></div>
+            </div>
+
+            <div className="flex gap-2">
+                <div className="flex-1 h-10 bg-gray-200 rounded-xl"></div>
+                <div className="h-10 w-10 bg-gray-200 rounded-xl"></div>
+                <div className="h-10 w-10 bg-gray-200 rounded-xl"></div>
+            </div>
+        </div>
+    </div>
+);
+
 export default function Person() {
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState<TabType>('all');
@@ -411,7 +451,6 @@ const handleSubmit = async (e: React.FormEvent) => {
                         </svg>
                         <span>Głos: {persona.voice}</span>
                     </div>
-                    </div>
                     <div className="flex items-center gap-2">
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/>
@@ -470,6 +509,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                     )}
                 </div>
             </div>
+        </div>
     );
 
     const renderEmptyState = (isUserPersonas: boolean) => (
@@ -517,9 +557,8 @@ const handleSubmit = async (e: React.FormEvent) => {
     );
 
     const renderLoadingState = () => (
-        <div className="text-center py-8 sm:py-12">
-            <div className="animate-spin rounded-full h-12 w-12 sm:h-16 sm:w-16 border-b-4 border-blue-600 mx-auto mb-4"></div>
-            <p className="text-gray-600 text-base sm:text-lg">Ładowanie person...</p>
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
+            {Array(6).fill(0).map(_ => <PersonaCardSkeleton></PersonaCardSkeleton>)}
         </div>
     );
 

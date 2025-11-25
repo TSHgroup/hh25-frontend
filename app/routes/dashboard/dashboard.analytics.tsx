@@ -36,6 +36,44 @@ interface AnalyticsData {
 
 type Span = '7d' | '30d' | '1y';
 
+const SkeletonMetricCard = () => (
+    <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
+        <div className="animate-pulse space-y-3">
+            <div className="h-4 bg-gray-200 rounded w-28"></div>
+            <div className="h-9 bg-gray-200 rounded w-24"></div>
+            <div className="h-3 bg-gray-200 rounded w-36"></div>
+        </div>
+    </div>
+);
+
+const SkeletonStreakCard = () => (
+    <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 text-center md:col-span-2 lg:col-span-1">
+        <div className="animate-pulse space-y-3">
+            <div className="h-4 bg-gray-200 rounded w-32 mx-auto"></div>
+            <div className="h-11 bg-gray-200 rounded w-20 mx-auto"></div>
+            <div className="h-3 bg-gray-200 rounded w-24 mx-auto"></div>
+        </div>
+    </div>
+);
+
+const SkeletonChart = () => (
+    <div className="relative w-full min-h-[300px] max-h-[60vh] sm:aspect-2/1 bg-white p-4 sm:p-6 rounded-2xl shadow-lg border border-gray-100">
+        <div className="animate-pulse h-full flex flex-col">
+            <div className="h-6 bg-gray-200 rounded w-52 mb-8 mx-auto"></div>
+            <div className="flex-1 flex items-end justify-around gap-8 pb-4">
+                <div className="flex-1 bg-gray-200 rounded-t-lg" style={{ height: '65%' }}></div>
+                <div className="flex-1 bg-gray-200 rounded-t-lg" style={{ height: '82%' }}></div>
+                <div className="flex-1 bg-gray-200 rounded-t-lg" style={{ height: '48%' }}></div>
+            </div>
+            <div className="flex justify-around pt-4 border-t border-gray-200">
+                <div className="h-3 bg-gray-200 rounded w-20"></div>
+                <div className="h-3 bg-gray-200 rounded w-20"></div>
+                <div className="h-3 bg-gray-200 rounded w-20"></div>
+            </div>
+        </div>
+    </div>
+);
+
 const StatCard = ({ title, value, trend, unit = '' }: { title: string, value: string | number, trend: number | null, unit?: string }) => {
     const hasValidTrend = typeof trend === 'number' && isFinite(trend);
     const isPositive = hasValidTrend && trend >= 0;
@@ -131,18 +169,69 @@ export default function AnalyticsPage() {
 
     if (loading) {
         return (
-            <div className="text-center p-12">
-                <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mx-auto mb-4"></div>
-                <p className="text-gray-600 text-lg">Ładowanie analityki...</p>
+            <div className="space-y-4 sm:space-y-6">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Twoja Analityka</h1>
+                    <div className="flex items-center bg-gray-100 p-1 rounded-xl w-full sm:w-auto">
+                        {(['7d', '30d', '1y'] as Span[]).map(s => (
+                            <button
+                                key={s}
+                                onClick={() => setSpan(s)}
+                                className={`flex-1 sm:flex-none text-center px-3 sm:px-4 py-2 text-sm font-semibold rounded-lg transition ${
+                                    span === s ? 'bg-white text-blue-600 shadow' : 'text-gray-600 hover:bg-gray-200'
+                                }`}>
+                                {s === '7d' ? '7 Dni' : s === '30d' ? '30 Dni' : '1 Rok'}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                    <SkeletonMetricCard />
+                    <SkeletonMetricCard />
+                    <SkeletonStreakCard />
+                </div>
+
+                <SkeletonChart />
             </div>
         );
     }
 
     if (error) {
         return (
-            <div className="bg-red-50 border-l-4 border-red-600 p-6 rounded-2xl shadow-lg">
-                <h3 className="text-lg font-bold text-red-900">Błąd</h3>
-                <p className="text-red-800">{error}</p>
+            <div className="space-y-4 sm:space-y-6">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Twoja Analityka</h1>
+                    <div className="flex items-center bg-gray-100 p-1 rounded-xl w-full sm:w-auto">
+                        {(['7d', '30d', '1y'] as Span[]).map(s => (
+                            <button
+                                key={s}
+                                onClick={() => setSpan(s)}
+                                className={`flex-1 sm:flex-none text-center px-3 sm:px-4 py-2 text-sm font-semibold rounded-lg transition ${
+                                    span === s ? 'bg-white text-blue-600 shadow' : 'text-gray-600 hover:bg-gray-200'
+                                }`}>
+                                {s === '7d' ? '7 Dni' : s === '30d' ? '30 Dni' : '1 Rok'}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
+                <div className="bg-red-50 border-l-4 border-red-600 p-6 rounded-2xl shadow-lg">
+                    <div className="flex items-start gap-4">
+                        <svg className="w-8 h-8 text-red-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <div className="flex-1">
+                            <h3 className="text-lg font-bold text-red-900 mb-2">Błąd ładowania danych</h3>
+                            <p className="text-red-800">{error}</p>
+                            <button
+                                onClick={() => window.location.reload()}
+                                className="mt-4 px-6 py-2 bg-red-600 text-white font-semibold rounded-xl hover:bg-red-700 transition">
+                                Odśwież stronę
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }
@@ -153,7 +242,6 @@ export default function AnalyticsPage() {
 
     return (
         <div className="space-y-4 sm:space-y-6">
-            {/* ZMIANA: Ulepszona responsywność nagłówka */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Twoja Analityka</h1>
                     <div className="flex items-center bg-gray-100 p-1 rounded-xl w-full sm:w-auto">

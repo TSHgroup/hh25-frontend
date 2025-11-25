@@ -31,6 +31,14 @@ interface AnalyticsData {
     analytics: Analytics;
 }
 
+const StatCardSkeleton = () => (
+    <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-lg border border-gray-100 animate-pulse">
+        <div className="h-4 bg-gray-200 rounded w-24 mb-3"></div>
+        <div className="h-8 bg-gray-200 rounded w-16 mb-2"></div>
+        <div className="h-3 bg-gray-200 rounded w-32"></div>
+    </div>
+);
+
 const StatCard = ({ title, value, trend, unit = '' }: { title: string, value: string | number, trend: number | null, unit?: string }) => {
     const hasValidTrend = typeof trend === 'number' && isFinite(trend);
     const isPositive = hasValidTrend && trend >= 0;
@@ -135,9 +143,10 @@ export default function Dashboard() {
                     </Link>
                 </div>
                 {analyticsLoading ? (
-                    <div className="text-center py-8">
-                        <div className="animate-spin rounded-full h-8 w-8 border-b-4 border-blue-600 mx-auto mb-2"></div>
-                        <p className="text-gray-600 text-sm">Ładowanie statystyk...</p>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <StatCardSkeleton />
+                        <StatCardSkeleton />
+                        <StatCardSkeleton />
                     </div>
                 ) : analyticsData ? (
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
